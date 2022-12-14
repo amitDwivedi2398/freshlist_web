@@ -9,7 +9,7 @@ function VendorGuide() {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-5 mx-auto text-center">
-                            <h1 className="title heading-1 style-3 mb-40">Start an online retail business with <span className="text-brand">Nest</span> today</h1>
+                            <h1 className="title heading-1 style-3 mb-40">Start an Online retail business with <span className="text-brand">Nest</span> today</h1>
                             <p className="font-xl mb-80">Sell your products and accept credit card payments from buying customers. Shopify gives you everything you need to run a successful online store.</p>
                         </div>
                         <div className="col-xl-10 col-lg-12 m-auto">
