@@ -5,6 +5,8 @@ import CategoryProduct2 from "../ecommerce/Filter/CategoryProduct2";
 import CategoryProduct3 from "../ecommerce/Filter/CategoryProduct3";
 import Search from "../ecommerce/Search";
 import Dropdown from 'react-bootstrap/Dropdown';
+import Modal from 'react-bootstrap/Modal';
+import Location from "../../pages/location"
 
 const Header = ({
     totalCartItems,
@@ -25,7 +27,12 @@ const Header = ({
     });
 
     const handleToggle = () => setToggled(!isToggled);
-   
+
+    // modal
+    const [lgShow, setLgShow] = useState(false);
+
+    
+
     return (
         <>
             <header className="header-area header-style-1 header-height-2">
@@ -573,7 +580,7 @@ const Header = ({
                                             </li>
 
                                             <li>
-                                                <a href="/vendors-list">Brands</a>
+                                                <a href="/bdlist">Brands</a>
                                                 {/* <ul className="sub-menu">
                                                     <li><Link href="/vendors"><a>Vendors Grid</a></Link></li>
                                                     <li><Link href="/vendors-list"><a>Vendors List</a></Link></li>
@@ -843,6 +850,20 @@ const Header = ({
                                                     </li>
                                                 </ul> */}
                                             </li>
+                                            <li>
+                                                <Link href="/page-login">
+                                                     <a>
+                                                        Login
+                                                     </a>
+                                                 </Link>        
+                                            </li>
+                                            <li>
+                                                <Link href="/registration">
+                                                     <a>
+                                                        Register
+                                                     </a>
+                                                 </Link>        
+                                            </li>
                                             {/* <li>
                                                 <Link href="/#">
                                                     <a>
@@ -911,14 +932,17 @@ const Header = ({
                                 </div>
                             </div>
                             <div className="hotline d-none d-lg-flex">
+                                
                                 <img
-                                    src="/assets/imgs/theme/icons/icon-headphone.svg"
+                                    src="/assets/imgs/theme/mapicon.png"
                                     alt="hotline"
-                                />
+                                className="map-img"/>
+                                <a href="#" onClick={() => setLgShow(true)}>
 
-                                <p>
-                                    1900 - 888<span>24/7 Support Center</span>
+                                <p style={{fontSize:14}}>
+                                   5171 W Campbell Ave undefined Kent,<span>Delivery Address </span>
                                 </p>
+                                </a>
                             </div>
 
                             <div className="header-action-icon-2 d-block d-lg-none stt">
@@ -1073,6 +1097,51 @@ const Header = ({
                     </div>
                 </div>
             </header>
+
+
+            {/* modal location */}
+            <Modal
+                size="lg"
+                show={lgShow}
+                onHide={() => setLgShow(false)}
+                aria-labelledby="example-modal-sizes-title-lg"
+             >
+                <Modal.Header closeButton>
+                    <Modal.Title id="example-modal-sizes-title-lg">
+                        Add Delivery Address
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="row" >
+                        <div className="col-md-12">
+                            <form>
+                                <div className="row">
+                                   <div className="col-lg-12 col-md-12">
+                                        <div className="input-style mb-20">
+                                             <label>Address Title</label>
+                                             <input name="name" placeholder="office" type="text" />
+                                         </div>
+                                    </div>
+                                    <div className="col-md-12 mt-10 mb-20">
+                                        <Location/>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <div className="input-style mb-20">
+                                             <label>Address</label>
+                                             <textarea name="name" placeholder="address.." type="text"  className="wt-1"/>
+                                         </div>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <button className="submit submit-auto-width">Save Address</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </Modal.Body>
+           </Modal>
+
+            {/* modal location close */}
         </>
     );
 };

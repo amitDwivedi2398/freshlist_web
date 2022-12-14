@@ -1,41 +1,31 @@
-import Link from "next/link";
-import { Col, Row } from "react-bootstrap";
-import Layout from "../components/layout/Layout";
+import React from "react";
+import GoogleMapReact from 'google-map-react';
 
-function Location() {
-    return (
-        <>
-            <Layout parent="Home" sub="Location" >
-                <div className="page-content pt-30 pb-20">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md-6">
-                                 <div className="locate-box">
-                                     <h4 className="mb-3">Add New Adress</h4>
-                                    <form>
-                                        <Row>
-                                            <Col md="12">
-                                               <input className="form-control loc-int" placeholder="Search Your Location" />
-                                            </Col>
-                                            <br></br>
-                                            <Col md="12">
-                                                <input className="form-control loc-int" placeholder="Use Current Location"/>
-                                            </Col>
-                                        </Row>
-                                    </form>
-                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                 <div className="locate-box mt-10">
-                                     <h4 className="mb-3">Seved  Adress</h4> 
-                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Layout>
-        </>
-    );
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
+export default function SimpleMap(){
+  const defaultProps = {
+    center: {
+      lat: 10.99835602,
+      lng: 77.01502627
+    },
+    zoom: 11
+  };
+
+  return (
+    // Important! Always set the container height explicitly
+    <div style={{ height: '50vh', width: '100%' }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: "AIzaSyBcrDKP8L7kOmO3_P_98Gpaw0zRSw8mf4Y" }}
+        defaultCenter={defaultProps.center}
+        defaultZoom={defaultProps.zoom}
+      >
+        <AnyReactComponent
+          lat={59.955413}
+          lng={30.337844}
+          text="My Marker"
+        />
+      </GoogleMapReact>
+    </div>
+  );
 }
-
-export default Location;

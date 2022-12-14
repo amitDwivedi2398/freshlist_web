@@ -7603,7 +7603,7 @@ h6.post-title {
 }
 
 .header-style-1 .header-middle-ptb-1 {
-  padding: 30px 0;
+  padding: 6px 0;
 }
 
 .header-style-1 .select2-container {
@@ -7772,7 +7772,7 @@ h6.post-title {
 }
 
 .header-style-1 .main-categori-wrap > a:hover {
-  background-color: #29A56C;
+  background-color: #67177a;
 }
 
 .header-style-1 .main-menu.main-menu-light-white > nav > ul > li > a {
@@ -11720,6 +11720,11 @@ footer .hotline img {
 
 
 /* rohit css */
+
+textarea.wt-1 {
+  min-height: 80px;
+}
+
 input.form-control.loc-int {
   margin-bottom: 15px;
 }
@@ -11814,6 +11819,42 @@ span.chk-2 {
   background: #cccccc3b;
   border-radius: 4px;
 }
+
+.add-1.address {
+  padding: 40px 30px;
+}
+.schedule-bx{
+  margin-top: 20px;
+}
+.schedule-bx ul li {
+  width: 120px;
+  display: inline-flex;
+  text-align: center;
+  background: #f3f4f6;
+  margin-right: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+.list-she h5 {
+  font-size: 16px;
+}
+.schedule-bx ul li:hover{
+  background: #7eb200; 
+  color: #fff;  
+  
+}
+.list-she h5 {
+  font-size: 16px;
+}
+
+img.map-img {
+  width: 30px;
+  height: 30px;
+  margin-right: 2px;
+}
+
+
+
 
 /* responsive css  */
 
