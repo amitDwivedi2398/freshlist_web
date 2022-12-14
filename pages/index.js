@@ -76,14 +76,14 @@ export default function Home() {
                 <section className="product-tabs section-padding position-relative">
                     <div className="container">
                         <div className="col-lg-12">
-                            <CategoryTab />
+                            {/* <CategoryTab /> */}
                         </div>
                     </div>
                 </section>
 
                 <section className="section-padding pb-5">
                     <div className="container">
-                        <FetchTabSlider />
+                        {/* <FetchTabSlider /> */}
                     </div>
                 </section>
 
@@ -98,7 +98,7 @@ export default function Home() {
                                 </a>
                             </Link>
                         </div>
-                        <FeatchDeals />
+                        {/* <FeatchDeals /> */}
                     </div>
                 </section>
 
