@@ -5,6 +5,7 @@ function Demo() {
     return (
         <>
             <Layout parent="Home" sub="Pages" subChild="About">
+            <h2>hello world</h2>
             </Layout>
         </>
     );
