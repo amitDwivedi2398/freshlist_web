@@ -2,8 +2,29 @@ import Link from "next/link";
 import React from "react";
 import Layout from "../components/layout/Layout";
 import data from "../util/storeData";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 
 const BrdList = () => {
+
+    const [brand, setbrand] = useState([]);
+
+    const getAllBrand = () => {
+      axios
+        .get(`http://3.6.37.16:8000/admin/brandlist`)
+        .then((res) => {
+          console.log(res.data.data);
+          setbrand(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  
+    useEffect(() => {
+        getAllBrand();
+    }, []);
 
     return (
 
@@ -76,20 +97,20 @@ const BrdList = () => {
                             </div>
                         </div>
                         <div className="row vendor-grid">
-                            {data.map((item, i) => (
+                            {brand.map((data, i) => (
                                 
                                     <div className="col-lg-2 col-md-2 col-12 col-sm-4" key={i}>
                                         <div className="vendor-wrap mb-40  style-2 text-center">
                                             <div className="product-badges product-badges-position product-badges-mrg">
-                                                <span className="hot">Brand</span>
+                                                <span className="hot">Offer {data.discount}</span>
                                             </div>
                                             <div className="vendor-img-action-wrap rt-2">
                                                 <div className="vendor-img">
-                                                    <Link href={`vendor/${item.id}`}><a>
-                                                        <img className="default-img" src={`assets/imgs/vendor/${item.img}`} alt="" />
+                                                    <Link href={`vendor/${data.id}`}><a>
+                                                        <img className="default-img" src={data.image} alt="" width={80} height={80} />
                                                     </a></Link>
                                                 </div>
-                                                <h5>lorem ipsum</h5>
+                                                <h5>{data.brand_name}</h5>
                                                 <div className="mt-10">
                                                     <a href="shop-list-left">
                                                          <span className="font-small total-product">380 products</span>

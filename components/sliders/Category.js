@@ -3,97 +3,117 @@ import { connect } from "react-redux";
 import SwiperCore, { Autoplay, Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { updateProductCategory } from "./../../redux/action/productFiltersAction";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 SwiperCore.use([Navigation, Autoplay]);
-const data = [
-    {
-        id: 1,
-        title: "Cake & Milk",
-        slug: "jeans",
-        img: "cat-13.png",
-        bg: "bg-9"
-    },
-    {
-        id: 2,
-        title: "Oganic Kiwi",
-        slug: "shoe",
-        img: "cat-12.png",
-        bg: "bg-10"
-    },
-    {
-        id: 3,
-        title: "Peach",
-        slug: "jacket",
-        img: "cat-11.png",
-        bg: "bg-11"
-    },
-    {
-        id: 4,
-        title: "Red Apple",
-        img: "cat-9.png",
-        bg: "bg-12"
-    },
-    {
-        id: 5,
-        title: "Snack",
-        img: "cat-3.png",
-        bg: "bg-13"
-    },
-    {
-        id: 6,
-        title: "Vegetables",
-        img: "cat-1.png",
-        bg: "bg-14"
-    },
-    {
-        id: 7,
-        title: "Strawberry",
-        img: "cat-2.png",
-        bg: "bg-15"
-    },
-    {
-        id: 8,
-        title: "Black plum",
-        img: "cat-4.png",
-        bg: "bg-12"
-    },
-    {
-        id: 9,
-        title: "Custard apple",
-        img: "cat-5.png",
-        bg: "bg-10"
-    },
-    {
-        id: 10,
-        title: "Coffe & Tea",
-        img: "cat-14.png",
-        bg: "bg-12"
-    },
-    {
-        id: 11,
-        title: "Headphone",
-        img: "cat-15.png",
-        bg: "bg-11"
-    }
-];
+// const data = [
+//     {
+//         id: 1,
+//         title: "Cake & Milk",
+//         slug: "jeans",
+//         img: "cat-13.png",
+//         bg: "bg-9"
+//     },
+//     {
+//         id: 2,
+//         title: "Oganic Kiwi",
+//         slug: "shoe",
+//         img: "cat-12.png",
+//         bg: "bg-10"
+//     },
+//     {
+//         id: 3,
+//         title: "Peach",
+//         slug: "jacket",
+//         img: "cat-11.png",
+//         bg: "bg-11"
+//     },
+//     {
+//         id: 4,
+//         title: "Red Apple",
+//         img: "cat-9.png",
+//         bg: "bg-12"
+//     },
+//     {
+//         id: 5,
+//         title: "Snack",
+//         img: "cat-3.png",
+//         bg: "bg-13"
+//     },
+//     {
+//         id: 6,
+//         title: "Vegetables",
+//         img: "cat-1.png",
+//         bg: "bg-14"
+//     },
+//     {
+//         id: 7,
+//         title: "Strawberry",
+//         img: "cat-2.png",
+//         bg: "bg-15"
+//     },
+//     {
+//         id: 8,
+//         title: "Black plum",
+//         img: "cat-4.png",
+//         bg: "bg-12"
+//     },
+//     {
+//         id: 9,
+//         title: "Custard apple",
+//         img: "cat-5.png",
+//         bg: "bg-10"
+//     },
+//     {
+//         id: 10,
+//         title: "Coffe & Tea",
+//         img: "cat-14.png",
+//         bg: "bg-12"
+//     },
+//     {
+//         id: 11,
+//         title: "Headphone",
+//         img: "cat-15.png",
+//         bg: "bg-11"
+//     }
+// ];
 const CategorySlider = () => {
 
+    const [category, setcategory] = useState([]);
 
     const router = useRouter();
 
-    const selectCategory = (e, category) => {
+     const selectCategory = (e, category) => {
         e.preventDefault();
-        // removeSearchTerm();
+    //     // removeSearchTerm();
         updateProductCategory(category);
         router.push({
             pathname: "/products",
-            query: {
+           query: {
                 cat: category //
             }
-        });
+       });
 
         console.log("Click");
-    };
+     };
+
+
+    //allcategory
+    const getAllCategory = () => {
+        axios
+            .get(`http://3.6.37.16:8000/admin/getallcategory`)
+            .then((res) => {
+              console.log(res.data.data);
+              setcategory(res.data.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        };
+        useEffect(() => {
+          getAllCategory();
+        }, []);
 
     return (
         <>
@@ -125,16 +145,16 @@ const CategorySlider = () => {
                     }
                 }}
             >
-                {data.map((item, i) => (
+                {category.map((data, i) => (
                     <SwiperSlide key={i}>
-                        <div className={`card-2 ${item.bg} wow animate__animated animate__fadeInUp`} onClick={(e) => selectCategory(e, item.slug)}>
+                        <div className={`card-2 ${data.bg} wow animate__animated animate__fadeInUp`} onClick={(e) => selectCategory(e, data.slug)}>
                             <figure className=" img-hover-scale overflow-hidden">
                                 <a>
-                                    <img src={`assets/imgs/shop/${item.img}`} alt="" />
+                                    <img src={data.image} alt="" />
                                 </a>
                             </figure>
                             <h6>
-                                <a>{item.title}</a>
+                                <a>{data.category_name}</a>
                             </h6>
                             <span>26 items</span>
                         </div>

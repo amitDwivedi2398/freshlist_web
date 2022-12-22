@@ -9,7 +9,15 @@ function Account() {
     const handleOnClick = (index) => {
         setActiveIndex(index); // remove the curly braces
     };
-
+    
+    const handleLogout = (e) => {
+        alert("Are you sure to logout");
+        console.log("logout hhhhh")
+        localStorage.clear();
+        // window.location.reload()
+        window.location.replace("/");
+        //  window.location.replace("http://soxypay.com/");
+      };
 
     return (
         <>
@@ -38,7 +46,13 @@ function Account() {
                                                     <a className={activeIndex === 5 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(5)}><i className="fi-rs-user mr-10"></i>Account details</a>
                                                 </li>
                                                 <li className="nav-item">
-                                                    <Link href="/page-login"><a className="nav-link"><i className="fi-rs-sign-out mr-10"></i>Logout</a></Link>
+                                                    <a className={activeIndex === 6 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(6)}><i className="fi-rs-user mr-10"></i>Wallet</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className={activeIndex === 7 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(7)}><i className="fi-rs-user mr-10"></i>Refer and Earning</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <Link href="/page-login"><a className="nav-link" onClick={() => handleLogout()}><i className="fi-rs-sign-out mr-10"></i>Logout</a></Link>
                                                 </li>
                                             </ul>
                                         </div>
@@ -208,6 +222,98 @@ function Account() {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className={activeIndex === 6 ? "tab-pane fade active show" : "tab-pane fade "} >
+                                                <div className="card">
+                                                    <div className="card-header">
+                                                        <h5>Wallet</h5>
+                                                    </div>
+                                                    <div className="card-body">
+                                                        <div className="table-responsive">
+                                                            <table className="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Order</th>
+                                                                        <th>Date</th>
+                                                                        <th>Status</th>
+                                                                        <th>Total</th>
+                                                                        <th>Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>#1357</td>
+                                                                        <td>March 45, 2020</td>
+                                                                        <td>Processing</td>
+                                                                        <td>$125.00 for 2 item</td>
+                                                                        <td><a href="#" className="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>#2468</td>
+                                                                        <td>June 29, 2020</td>
+                                                                        <td>Completed</td>
+                                                                        <td>$364.00 for 5 item</td>
+                                                                        <td><a href="#" className="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>#2366</td>
+                                                                        <td>August 02, 2020</td>
+                                                                        <td>Completed</td>
+                                                                        <td>$280.00 for 3 item</td>
+                                                                        <td><a href="#" className="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={activeIndex === 7 ? "tab-pane fade active show" : "tab-pane fade "} >
+                                                <div className="card">
+                                                    <div className="card-header">
+                                                        <h5>Refer and Earning</h5>
+                                                    </div>
+                                                    <div className="card-body">
+                                                        <div className="table-responsive">
+                                                            <table className="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Order</th>
+                                                                        <th>Date</th>
+                                                                        <th>Status</th>
+                                                                        <th>Total</th>
+                                                                        <th>Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>#1357</td>
+                                                                        <td>March 45, 2020</td>
+                                                                        <td>Processing</td>
+                                                                        <td>$125.00 for 2 item</td>
+                                                                        <td><a href="#" className="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>#2468</td>
+                                                                        <td>June 29, 2020</td>
+                                                                        <td>Completed</td>
+                                                                        <td>$364.00 for 5 item</td>
+                                                                        <td><a href="#" className="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>#2366</td>
+                                                                        <td>August 02, 2020</td>
+                                                                        <td>Completed</td>
+                                                                        <td>$280.00 for 3 item</td>
+                                                                        <td><a href="#" className="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

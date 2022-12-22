@@ -80,13 +80,51 @@ const MobileMenu = ({ isToggled, toggleClick }) => {
                                 </Link>
                                 <div className="categori-dropdown-wrap categori-dropdown-active-small rt-1">
                                     <ul>
-                                        <li>
-                                           <Link href="/shop-grid-right">
-                                                <a>
-                                                    <i className="evara-font-dress"></i>
-                                                    Women's Clothing
-                                                </a>
+                                        <li
+                                            className={
+                                                isActive.key == 9
+                                                    ? "menu-item-has-children active"
+                                                    : "menu-item-has-children"
+                                            }
+                                        >
+                                            <Link href="#">
+                                                <a> Men's Clothing</a>
                                             </Link>
+                                            <span
+                                                className="menu-expand"
+                                                onClick={() => handleToggle(9)}
+                                            >
+                                                <i className="fi-rs-angle-small-down"></i>
+                                            </span>
+                                            
+                                            <ul
+                                                className={
+                                                    isActive.key == 9
+                                                        ? "dropdown cate"
+                                                        : "d-none"
+                                                }
+                                            >
+                                                <li>
+                                                    <Link href="#">
+                                                        <a>lorem</a>
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="#">
+                                                        <a>lorem</a>
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="#">
+                                                        <a>German</a>
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="#">
+                                                        <a>lorem</a>
+                                                    </Link>
+                                                </li>
+                                            </ul>
                                         </li>
                                         <li>
                                            <Link href="/shop-grid-right">

@@ -1,12 +1,44 @@
 import Link from "next/link";
 import Layout from "../components/layout/Layout";
-
+import Router from "next/router";
+import { useState } from "react";
+import axios from "axios"
+import { toast } from "react-toastify";
 
 function Login() {
+const [input,setInput]=useState("")
+const [password,setPassword]=useState("")
+console.log(input,password)
+    const handleLogin = (e) => {
+        e.preventDefault();
+        // localStorage.setItem("mobile", input);
+   
+          axios
+            .post(`http://3.6.37.16:8000/user/login`,{
+                mobile:input,
+                password:password
+            })
+            .then((res) => {
+              console.log(res.data.token);
+             const token= res.data.token
+            //   setToken(res.data.token)
+              localStorage.setItem("token",token)
+             if (res.data.msg == "login success") {
+                toast("login success !");
+                 Router.push("/");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+       
+      };
+
+
     return (
         <>
             <Layout parent="Home" sub="Pages" subChild="Login & Register">
-            <div className="page-content pt-150 pb-150">
+            <div className="page-content pt-70 pb-70">
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-8 col-lg-10 col-md-12 m-auto">
@@ -23,12 +55,31 @@ function Login() {
                                             </div>
                                             <form method="post">
                                                 <div className="form-group">
-                                                    <input type="text" required="" name="email" placeholder="Username or Email *" />
+                                                    <input
+                                                    value={input}
+                                                    type="text"
+                                                    required=""
+                                                    name=""
+                                                    placeholder="Please Enter Your Mobile Number"
+                                                    onChange={(e) => {
+                                                        setInput(e.target.value);
+                                                    }}
+                                                    />
                                                 </div>
                                                 <div className="form-group">
-                                                    <input required="" type="password" name="password" placeholder="Your password *" />
+                                                    <input
+                                                    value={password}
+                                                    type="password"
+                                                    required=""
+                                                    name=""
+                                                    placeholder="Please Enter Your Mobile Number"
+                                                    onChange={(e) => {
+                                                        setPassword(e.target.value);
+                                                    }}
+                                                    />
                                                 </div>
-                                                <div className="login_footer form-group">
+                                               
+                                                {/* <div className="login_footer form-group">
                                                     <div className="chek-form">
                                                         <input type="text" required="" name="email" placeholder="Security code *" />
                                                     </div>
@@ -38,7 +89,7 @@ function Login() {
                                                         <b className="text-sale">7</b>
                                                         <b className="text-best">5</b>
                                                     </span>
-                                                </div>
+                                                </div> */}
                                                 <div className="login_footer form-group mb-50">
                                                     <div className="chek-form">
                                                         <div className="custome-checkbox">
@@ -49,7 +100,14 @@ function Login() {
                                                     <a className="text-muted" href="#">Forgot password?</a>
                                                 </div>
                                                 <div className="form-group">
-                                                    <button type="submit" className="btn btn-heading btn-block hover-up" name="login">Log in</button>
+                                                    {/* <button   onClick={handleregister}    type="submit" className="btn btn-heading btn-block hover-up" name="login"  >Log in</button> */}
+                                                    <a
+                                                         onClick={handleLogin}
+                                                        //  href="otp-verify"
+                                                         className="btn btn-fill-out btn-block hover-up font-weight-bold"
+                                                         >
+                                                        Log in
+                                                    </a>
                                                 </div>
                                             </form>
                                         </div>
