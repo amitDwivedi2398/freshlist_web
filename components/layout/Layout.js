@@ -34,15 +34,16 @@ const Layout = ({
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-              <Script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg8bRuV-VrBPOB2KOtMJ7mrGkD8trhoZM"></Script>
+            // <Script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg8bRuV-VrBPOB2KOtMJ7mrGkD8trhoZM"></Script>
 
-             <Script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg8bRuV-VrBPOB2KOtMJ7mrGkD8trhoZM"></Script>
 
-             <Script
-              type="text/javascript"
-               src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg8bRuV-VrBPOB2KOtMJ7mrGkD8trhoZM"
-             ></Script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=1b9ea3c094d3ac23c9a3afa8cd4d8a41f05de50a"></script>
 
+
+            // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+
+           
+            
             {isToggled && <div className="body-overlay-1" onClick={toggleClick}></div>}
 
             <Header headerStyle={headerStyle} isToggled={isToggled} toggleClick={toggleClick} />

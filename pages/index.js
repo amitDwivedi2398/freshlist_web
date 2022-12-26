@@ -1,4 +1,4 @@
-import CategoryTab from "../components/ecommerce/categoryTab";
+// import CategoryTab from "../components/ecommerce/categoryTab";
 import FeatchDeals from "../components/ecommerce/fetchDeals";
 import FeatchTab from "../components/ecommerce/fetchTab";
 import FetchTabSlider from "../components/ecommerce/fetchTabSlider";
@@ -11,6 +11,7 @@ import Layout from "./../components/layout/Layout";
 import CategorySlider from "./../components/sliders/Category";
 import Intro1 from "./../components/sliders/Intro1";
 import Link from "next/link";
+import ProductLists from "./product-list";
 
 export default function Home() {
     return (
@@ -75,8 +76,9 @@ export default function Home() {
 
                 <section className="product-tabs section-padding position-relative">
                     <div className="container">
+                        <h3 className="mb-3">Popular Products</h3>
                         <div className="col-lg-12">
-                            <CategoryTab />
+                            <ProductLists />
                         </div>
                     </div>
                 </section>

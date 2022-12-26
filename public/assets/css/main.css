@@ -11721,6 +11721,10 @@ footer .hotline img {
 
 
 /* rohit css */
+.slider-arrow.slider-arrow-2.carausel-6-columns-arrow.rt-arrow {
+  left: 0px !important;
+  /* right: -30px !important; */
+}
 .card-login.mt-115 {
   margin-top: 2px !important;
   margin-left: 0px !important;

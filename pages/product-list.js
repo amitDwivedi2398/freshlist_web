@@ -9,7 +9,7 @@ import {  Container, Row } from "react-bootstrap";
 
 SwiperCore.use([Navigation]);
 
-const NewArrivalTabSlider = ({
+const ProductLists = ({
     addToCart,
     addToCompare,
     addToWishlist,
@@ -229,4 +229,4 @@ const NewArrivalTabSlider = ({
     );
 };
 
-export default NewArrivalTabSlider;
+export default ProductLists;
