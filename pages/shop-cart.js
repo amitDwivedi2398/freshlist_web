@@ -1,214 +1,224 @@
 import { connect } from "react-redux";
 import Layout from "../components/layout/Layout";
+import React from "react";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import Link from "next/link";
 import {
-    clearCart,
-    closeCart,
-    decreaseQuantity,
-    deleteFromCart,
-    increaseQuantity,
-    openCart
+  clearCart,
+  closeCart,
+  decreaseQuantity,
+  //   deleteFromCart,
+  increaseQuantity,
+  openCart,
 } from "../redux/action/cart";
 
 const Cart = ({
-    openCart,
-    cartItems,
-    activeCart,
-    closeCart,
-    increaseQuantity,
-    decreaseQuantity,
-    deleteFromCart,
-    clearCart,
+  openCart,
+  //   cartItems,
+  activeCart,
+  closeCart,
+  increaseQuantity,
+  decreaseQuantity,
+  //   deleteFromCart,
+  clearCart,
 }) => {
-    const price = () => {
-        let price = 0;
-        cartItems.forEach((item) => (price += item.price * item.quantity));
+  const price = () => {
+    let price = 0;
+    // cartItems.forEach((item) => (price += item.price * item.quantity));
 
-        return price;
-    };
+    return price;
+  };
 
-    return (
-        <>
-            <Layout parent="Home" sub="Shop" subChild="Cart">
-                <section className="mt-50 mb-50">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-12 mb-40">
-                                <h1 className="heading-2 mb-10">Your Cart</h1>
-                                <div className="d-flex justify-content-between">
-                                    <h6 className="text-body">
-                                        There are{" "}
-                                        <span className="text-brand">3</span>{" "}
-                                        products in your cart
-                                    </h6>
-                                    <h6 className="text-body">
-                                        <a href="#" className="text-muted">
-                                            <i className="fi-rs-trash mr-5"></i>
-                                            Clear Cart
-                                        </a>
-                                    </h6>
-                                </div>
+  const [cartItems, setCartItems] = useState([]);
+
+  const deleteFromCart = (id) => {
+    console.log(id);
+    const userId = localStorage.getItem("userId");
+
+    axios
+      .delete(`http://3.6.37.16:8000/admin/remove_cart/${id}`)
+      .then((res) => {
+        console.log(res.data.msg);
+
+        if (res.data.msg == "success") {
+          toast("Product Delete Successfully");
+          getAllCart();
+        } else {
+          toast("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getAllCart = () => {
+    const userId = localStorage.getItem("userId");
+    axios
+      .get(`http://3.6.37.16:8000/admin/getbycart/${userId}`)
+      //   .get(`http://3.6.37.16:8000/admin/getbycart/63a1587b5d5470a96dba6891`)
+      .then((res) => {
+        console.log(res.data.data);
+        setCartItems(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getAllCart();
+  }, []);
+
+  return (
+    <>
+      <Layout parent="Home" sub="Shop" subChild="Cart">
+        <section className="mt-50 mb-50">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12 mb-40">
+                <h1 className="heading-2 mb-10">Your Cart</h1>
+                <div className="d-flex justify-content-between">
+                  <h6 className="text-body">
+                    There are <span className="text-brand">3</span> products in
+                    your cart
+                  </h6>
+                  <h6 className="text-body">
+                    <a href="#" className="text-muted">
+                      <i className="fi-rs-trash mr-5"></i>
+                      Clear Cart
+                    </a>
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="table-responsive shopping-summery">
+                  {cartItems.length <= 0 && "No Products"}
+                  <table
+                    className={
+                      cartItems.length > 0 ? "table table-wishlist" : "d-none"
+                    }
+                  >
+                    <thead>
+                      <tr className="main-heading">
+                        <th
+                          className="custome-checkbox start pl-30"
+                          colSpan="2"
+                        >
+                          Product
+                        </th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col" className="end">
+                          Remove
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((data, i) => (
+                        <tr key={i}>
+                          <td className="image product-thumbnail">
+                            <img src={data.product?.product_image} />
+                          </td>
+
+                          <td className="product-des product-name">
+                            <h6 className="product-name">
+                              <Link href="/products">
+                                <a>{data.product?.product_name}</a>
+                              </Link>
+                            </h6>
+                            <div className="product-rate-cover">
+                              <div className="product-rate d-inline-block">
+                                <div
+                                  className="product-rating"
+                                  style={{
+                                    width: "90%",
+                                  }}
+                                ></div>
+                              </div>
+                              <span className="font-small ml-5 text-muted">
+                                {" "}
+                                (4.0)
+                              </span>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div className="table-responsive shopping-summery">
-                                    {cartItems.length <= 0 && "No Products"}
-                                    <table
-                                        className={
-                                            cartItems.length > 0
-                                                ? "table table-wishlist"
-                                                : "d-none"
-                                        }
-                                    >
-                                        <thead>
-                                            <tr className="main-heading">
-                                                <th className="custome-checkbox start pl-30" colSpan="2">
-                                                    Product
-                                                </th>
-                                                <th scope="col">Unit Price</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Subtotal</th>
-                                                <th scope="col" className="end">
-                                                    Remove
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {cartItems.map((item, i) => (
-                                                <tr key={i}>
-                                                    <td className="image product-thumbnail">
-                                                        <img
-                                                            src={
-                                                                item.images[0]
-                                                                    .img
-                                                            }
-                                                        />
-                                                    </td>
+                          </td>
+                          <td className="price" data-title="Price">
+                            <h4 className="text-brand">${data.product?.mrp}</h4>
+                          </td>
+                          <td
+                            className="text-center detail-info"
+                            data-title="Stock"
+                          >
+                            <div className="detail-extralink mr-15">
+                              <div className="detail-qty border radius ">
+                                <a
+                                  onClick={(e) =>
+                                    decreaseQuantity(data.product?.id)
+                                  }
+                                  className="qty-down"
+                                >
+                                  <i className="fi-rs-angle-small-down"></i>
+                                </a>
+                                <span className="qty-val">
+                                  {data.product?.quantity}
+                                </span>
+                                <a
+                                  onClick={(e) =>
+                                    increaseQuantity(data.product?.id)
+                                  }
+                                  className="qty-up"
+                                >
+                                  <i className="fi-rs-angle-small-up"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="text-right" data-title="Cart">
+                            <h4 className="text-body">${data.subtotal}</h4>
+                          </td>
+                          <td className="action" data-title="Remove">
+                            <a
+                              onClick={(e) => deleteFromCart(data._id)}
+                              className="text-muted"
+                            >
+                              <i className="fi-rs-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td colSpan="6" className="text-end">
+                          {cartItems.length > 0 && (
+                            <a onClick={clearCart} className="text-muted">
+                              <i className="fi-rs-cross-small"></i>
+                              Clear Cart
+                            </a>
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
-                                                    <td className="product-des product-name">
-                                                        <h6 className="product-name">
-                                                            <Link href="/products">
-                                                                <a>
-                                                                    {item.title}
-                                                                </a>
-                                                            </Link>
-                                                        </h6>
-                                                        <div className="product-rate-cover">
-                                                            <div className="product-rate d-inline-block">
-                                                                <div
-                                                                    className="product-rating"
-                                                                    style={{
-                                                                        width: "90%",
-                                                                    }}
-                                                                ></div>
-                                                            </div>
-                                                            <span className="font-small ml-5 text-muted">
-                                                                {" "}
-                                                                (4.0)
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td
-                                                        className="price"
-                                                        data-title="Price"
-                                                    >
-                                                        <h4 className="text-brand">
-                                                            ${item.price}
-                                                        </h4>
-                                                    </td>
-                                                    <td
-                                                        className="text-center detail-info"
-                                                        data-title="Stock"
-                                                    ><div className="detail-extralink mr-15">
-                                                        <div className="detail-qty border radius ">
-                                                            <a
-                                                                onClick={(e) =>
-                                                                    decreaseQuantity(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                                className="qty-down"
-                                                            >
-                                                                <i className="fi-rs-angle-small-down"></i>
-                                                            </a>
-                                                            <span className="qty-val">
-                                                                {item.quantity}
-                                                            </span>
-                                                            <a
-                                                                onClick={(e) =>
-                                                                    increaseQuantity(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                                className="qty-up"
-                                                            >
-                                                                <i className="fi-rs-angle-small-up"></i>
-                                                            </a>
-                                                        </div>
-                                                        </div>
-                                                    </td>
-                                                    <td
-                                                        className="text-right"
-                                                        data-title="Cart"
-                                                    >
-                                                        <h4 className="text-body">
-                                                            $
-                                                            {item.quantity *
-                                                                item.price}
-                                                        </h4>
-                                                    </td>
-                                                    <td
-                                                        className="action"
-                                                        data-title="Remove"
-                                                    >
-                                                        <a
-                                                            onClick={(e) =>
-                                                                deleteFromCart(
-                                                                    item.id
-                                                                )
-                                                            }
-                                                            className="text-muted"
-                                                        >
-                                                            <i className="fi-rs-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                            <tr>
-                                                <td
-                                                    colSpan="6"
-                                                    className="text-end"
-                                                >
-                                                    {cartItems.length > 0 && (
-                                                        <a
-                                                            onClick={clearCart}
-                                                            className="text-muted"
-                                                        >
-                                                            <i className="fi-rs-cross-small"></i>
-                                                            Clear Cart
-                                                        </a>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                               
-                                <div className="divider center_icon mt-50 mb-50">
-                                    <i className="fi-rs-fingerprint"></i>
-                                </div>
-                                <div className="row mb-50">
-                                    <div className="col-lg-6 col-md-12">
-                                        <div className="cart-action text-end">
-                                            <a className="btn ">
-                                                <i className="fi-rs-shopping-bag mr-10"></i>
-                                                Continue Shopping
-                                            </a>
-                                        </div>
-                                    </div>
-                                    {/* <div className="col-lg-6 col-md-12">
+                <div className="divider center_icon mt-50 mb-50">
+                  <i className="fi-rs-fingerprint"></i>
+                </div>
+                <div className="row mb-50">
+                  <div className="col-lg-6 col-md-12">
+                    <div className="cart-action text-end">
+                      <a className="btn ">
+                        <i className="fi-rs-shopping-bag mr-10"></i>
+                        Continue Shopping
+                      </a>
+                    </div>
+                  </div>
+                  {/* <div className="col-lg-6 col-md-12">
                                         <div className="heading_s1 mb-3">
                                             <h4>Calculate Shipping</h4>
                                         </div>
@@ -1054,77 +1064,72 @@ const Cart = ({
                                             </div>
                                         </div>
                                     </div> */}
-                                    <div className="col-lg-6 col-md-12">
-                                        <div className="border p-md-4 p-30 border-radius cart-totals">
-                                            <div className="heading_s1 mb-3">
-                                                <h4>Cart Totals</h4>
-                                            </div>
-                                            <div className="table-responsive">
-                                                <table className="table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td className="cart_total_label">
-                                                                Cart Subtotal
-                                                            </td>
-                                                            <td className="cart_total_amount">
-                                                                <span className="font-lg fw-900 text-brand">
-                                                                    $ {price()}
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="cart_total_label">
-                                                                Shipping
-                                                            </td>
-                                                            <td className="cart_total_amount">
-                                                                <i className="ti-gift mr-5"></i>
-                                                                Free Shipping
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="cart_total_label">
-                                                                Total
-                                                            </td>
-                                                            <td className="cart_total_amount">
-                                                                <strong>
-                                                                    <span className="font-xl fw-900 text-brand">
-                                                                        $
-                                                                        {price()}
-                                                                    </span>
-                                                                </strong>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <a href="/shop-checkout" className="btn ">
-                                                <i className="fi-rs-box-alt mr-10"></i>
-                                                Proceed To CheckOut
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                  <div className="col-lg-6 col-md-12">
+                    <div className="border p-md-4 p-30 border-radius cart-totals">
+                      <div className="heading_s1 mb-3">
+                        <h4>Cart Totals</h4>
+                      </div>
+                      <div className="table-responsive">
+                        <table className="table">
+                          <tbody>
+                            <tr>
+                              <td className="cart_total_label">
+                                Cart Subtotal
+                              </td>
+                              <td className="cart_total_amount">
+                                <span className="font-lg fw-900 text-brand">
+                                  $ {price()}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="cart_total_label">Shipping</td>
+                              <td className="cart_total_amount">
+                                <i className="ti-gift mr-5"></i>
+                                Free Shipping
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="cart_total_label">Total</td>
+                              <td className="cart_total_amount">
+                                <strong>
+                                  <span className="font-xl fw-900 text-brand">
+                                    ${price()}
+                                  </span>
+                                </strong>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <a href="/shop-checkout" className="btn ">
+                        <i className="fi-rs-box-alt mr-10"></i>
+                        Proceed To CheckOut
+                      </a>
                     </div>
-                </section>
-            </Layout>
-        </>
-    );
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </Layout>
+    </>
+  );
 };
 
 const mapStateToProps = (state) => ({
-    cartItems: state.cart,
-    activeCart: state.counter,
+  cartItems: state.cart,
+  activeCart: state.counter,
 });
 
 const mapDispatchToProps = {
-    closeCart,
-    increaseQuantity,
-    decreaseQuantity,
-    deleteFromCart,
-    openCart,
-    clearCart,
+  closeCart,
+  increaseQuantity,
+  decreaseQuantity,
+  //   deleteFromCart,
+  openCart,
+  clearCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

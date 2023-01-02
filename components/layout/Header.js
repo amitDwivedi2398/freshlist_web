@@ -8,7 +8,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
 import Location from "../../pages/location";
 import axios from "axios";
-
+import { useRouter } from "next/router";
 const Header = ({
   totalCartItems,
   totalCompareItems,
@@ -21,21 +21,36 @@ const Header = ({
 
   const handleLogout = (e) => {
     alert("Are you sure to logout");
-    console.log("logout hhhhh")
+    console.log("logout hhhhh");
     localStorage.clear();
-    // window.location.reload()
     window.location.replace("/");
-    //  window.location.replace("http://soxypay.com/");
   };
 
   const [isToggled, setToggled] = useState(false);
   const [scroll, setScroll] = useState(0);
   const [token, setToken] = useState("");
- // modal
- const [lgShow, setLgShow] = useState(false);
- //viewoneuser
- const [customer, setCustomer] = useState({})
+  const [lgShow, setLgShow] = useState(false);
+  const [customer, setCustomer] = useState({});
+
+  const [viewcart, setViewcart] = useState("");
+  const [viewcartdata, setViewcartdata] = useState([]);
+
+  const getviewcart = () => {
+    const userid = localStorage.getItem("userId");
+    axios
+      .get(`http://3.6.37.16:8000/admin/getbycart/${userid}`)
+      // .get(`http://3.6.37.16:8000/admin/getbycart/63a1587b5d5470a96dba6891`)
+      .then((res) => {
+        setViewcart(res.data.length);
+
+        setViewcartdata(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
+    getviewcart();
+
     let data = localStorage.getItem("token");
     setToken(data);
     document.addEventListener("scroll", () => {
@@ -44,29 +59,30 @@ const Header = ({
         setScroll(scrollCheck);
       }
     });
-  });
+  }, [viewcart]);
 
   const handleToggle = () => setToggled(!isToggled);
 
- 
-  const fetchCustomer = async () => {
-
+  // viewone user
+  const fetchCustomer = () => {
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
     axios
-      .get(`http://3.6.37.16:8000/user/getviewone/63a15a61bb7e312a6a9fcadb`)
+      .get(`http://3.6.37.16:8000/user/getviewone/${userId}`)
       .then((response) => {
-        console.log(response.data.data)
-        setCustomer(response.data.data)
-        setToken(response.data.token)
+        console.log(response.data.data);
+        setCustomer(response.data.data);
+        setToken(response.data.token);
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    let data = localStorage.getItem('token')
-    setToken(data)
-    fetchCustomer()
-  }, [])
+    let data = localStorage.getItem("token");
+    setToken(data);
+    fetchCustomer();
+  }, []);
 
   return (
     <>
@@ -87,8 +103,8 @@ const Header = ({
                                             <Link href="/page-about">
                                                 <a>About Us</a>
                                             </Link>
-                                        </li> */}
-                    {/* <li>
+                                        </li> 
+                     <li>
                                             <Link href="/page-account">
                                                 <a>My Account</a>
                                             </Link>
@@ -296,9 +312,7 @@ const Header = ({
                             alt="Evara"
                             src="/assets/imgs/theme/icons/icon-cart.svg"
                           />
-                          <span className="pro-count blue">
-                            {totalCartItems}
-                          </span>
+                          <span className="pro-count blue">{viewcart}</span>
                         </a>
                       </Link>
                       <Link href="/shop-cart">
@@ -318,12 +332,11 @@ const Header = ({
                           />
                         </a>
                       </Link>
-                      <Link
-                        href="#"
-                        onClick={(e) => handleClick(e)}
-                      >
+                      <Link href="#" onClick={(e) => handleClick(e)}>
                         <a>
-                          <span className="lable ml-0">{token? (customer?.username):null}</span>
+                          <span className="lable ml-0">
+                            {token ? customer?.username : null}
+                          </span>
                         </a>
                       </Link>
                       <div className="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
@@ -390,7 +403,12 @@ const Header = ({
                                 </Link>
                               </li>
                               <li>
-                                <button className="lgbtn" onClick={handleLogout}>Sign Out</button>
+                                <button
+                                  className="lgbtn"
+                                  onClick={handleLogout}
+                                >
+                                  Sign Out
+                                </button>
                               </li>
                             </>
                           )}
@@ -900,7 +918,7 @@ const Header = ({
                                                     </li>
                                                 </ul> */}
                       </li>
-                      
+
                       {/* <li>
                                                 <Link href="/#">
                                                     <a>
@@ -1189,3 +1207,17 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, null)(Header);
+
+// export const getviewcart = () => {
+//   const [Viewcart, setViewcart] = useState("");
+
+//   const userid = localStorage.getItem("userId");
+//   axios
+//     .get(`http://3.6.37.16:8000/admin/getbycart/${userid}`)
+//     // .get(`http://3.6.37.16:8000/admin/getbycart/63a1587b5d5470a96dba6891`)
+//     .then((res) => {
+//       setViewcart(res.data.length);
+//       console.log(res.data.length);
+//     })
+//     .catch((err) => console.log(err));
+// };

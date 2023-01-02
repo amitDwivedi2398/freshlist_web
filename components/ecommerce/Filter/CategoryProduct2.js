@@ -5,7 +5,6 @@ import { updateProductCategory } from "../../../redux/action/productFiltersActio
 import { useState, useEffect } from "react";
 
 const CategoryProduct2 = ({ updateProductCategory }) => {
-
   const [category, setcategory] = useState([]);
   const [subcategory, setsubcategory] = useState([]);
 
@@ -25,11 +24,12 @@ const CategoryProduct2 = ({ updateProductCategory }) => {
     getAllCategory();
   }, []);
 
-
   // subcategory
   const getSubCategory = () => {
     axios
-      .get(`http://3.6.37.16:8000/admin/productby_category/6391c600e7cf9ef22a943a56`)
+      .get(
+        `http://3.6.37.16:8000/admin/productby_category/6391c600e7cf9ef22a943a56`
+      )
       .then((res) => {
         console.log(res.data.data);
         setsubcategory(res.data.data);
@@ -58,7 +58,7 @@ const CategoryProduct2 = ({ updateProductCategory }) => {
     router.push({
       pathname: "/products",
       query: {
-        cat: category, //
+        cat: category,
       },
     });
   };
@@ -87,18 +87,18 @@ const CategoryProduct2 = ({ updateProductCategory }) => {
                     {/* Milks & Dairies */}
                   </a>
                   <ul className="dropdown-menu drp-menu">
-                  {subcategory !== ""
-                  ? subcategory?.map((data) => (
-                      <>
-                    <li>
-                      <a href="#">
-                      <img src={data.image} alt="" />
-                      {data?.subcategory_name}
-                      </a>
-                    </li>
-                    </>
-                    ))
-                  : null}
+                    {subcategory !== ""
+                      ? subcategory?.map((data) => (
+                          <>
+                            <li>
+                              <a href="#">
+                                <img src={data.image} alt="" />
+                                {data?.subcategory_name}
+                              </a>
+                            </li>
+                          </>
+                        ))
+                      : null}
                   </ul>
                 </li>
               </>
