@@ -6,14 +6,17 @@ import CategoryProduct2 from "../ecommerce/Filter/CategoryProduct2";
 import Search from "../ecommerce/Search";
 import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
-import Location from "../../pages/location";
+// import Location from "../../pages/location";
 import axios from "axios";
 import { useRouter } from "next/router";
+import LocationDropdown from "../../pages/locationdropdown";
+import { usePlacesWidget } from "react-google-autocomplete";
+
 const Header = ({
   totalCartItems,
   totalCompareItems,
   toggleClick,
-  totalWishlistItems,
+  // totalWishlistItems,
 }) => {
   const handleClick = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
@@ -33,7 +36,23 @@ const Header = ({
   const [customer, setCustomer] = useState({});
 
   const [viewcart, setViewcart] = useState("");
+  const [viewwishlist, setViewwishlist] = useState("");
+
   const [viewcartdata, setViewcartdata] = useState([]);
+  const [viewwishlistdata, setViewwishlistdata] = useState([]);
+
+  const getviewwishlist = () => {
+    const userid = localStorage.getItem("userId");
+    axios
+      .get(`http://3.6.37.16:8000/admin/all_wishlist/${userid}`)
+      // .get(`http://3.6.37.16:8000/admin/getbycart/63a1587b5d5470a96dba6891`)
+      .then((res) => {
+        setViewwishlist(res.data.length);
+
+        setViewwishlistdata(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const getviewcart = () => {
     const userid = localStorage.getItem("userId");
@@ -48,18 +67,23 @@ const Header = ({
       .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    getviewcart();
+  useEffect(
+    () => {
+      getviewcart();
+      getviewwishlist();
 
-    let data = localStorage.getItem("token");
-    setToken(data);
-    document.addEventListener("scroll", () => {
-      const scrollCheck = window.scrollY >= 100;
-      if (scrollCheck !== scroll) {
-        setScroll(scrollCheck);
-      }
-    });
-  }, [viewcart]);
+      let data = localStorage.getItem("token");
+      setToken(data);
+      document.addEventListener("scroll", () => {
+        const scrollCheck = window.scrollY >= 100;
+        if (scrollCheck !== scroll) {
+          setScroll(scrollCheck);
+        }
+      });
+    },
+    [viewcart],
+    [viewwishlist]
+  );
 
   const handleToggle = () => setToggled(!isToggled);
 
@@ -247,26 +271,9 @@ const Header = ({
                 </div>
                 <div className="header-action-right">
                   <div className="header-action-2">
-                    <div className="search-location">
-                      <form action="#">
-                        <select className="select-active">
-                          <option>Your Location</option>
-                          <option>Alabama</option>
-                          <option>Alaska</option>
-                          <option>Arizona</option>
-                          <option>Delaware</option>
-                          <option>Florida</option>
-                          <option>Georgia</option>
-                          <option>Hawaii</option>
-                          <option>Indiana</option>
-                          <option>Maryland</option>
-                          <option>Nevada</option>
-                          <option>New Jersey</option>
-                          <option>New Mexico</option>
-                          <option>New York</option>
-                        </select>
-                      </form>
-                    </div>
+                    {/* <div className="search-location">
+                      <LocationDropdown />
+                    </div> */}
                     {/* <div className="header-action-icon-2">
                                             <Link href="/shop-compare">
                                                 <a>
@@ -296,9 +303,7 @@ const Header = ({
                             alt="Evara"
                             src="/assets/imgs/theme/icons/icon-heart.svg"
                           />
-                          <span className="pro-count blue">
-                            {totalWishlistItems}
-                          </span>
+                          <span className="pro-count blue">{viewwishlist}</span>
                         </a>
                       </Link>
                       <Link href="/shop-wishlist">
@@ -323,7 +328,7 @@ const Header = ({
                     </div>
 
                     <div className="header-action-icon-2">
-                      <Link href="/page-account">
+                      <Link href="#">
                         <a>
                           <img
                             className="svgInject"
@@ -992,7 +997,7 @@ const Header = ({
                   alt="hotline"
                   className="map-img"
                 />
-                <a href="#" onClick={() => setLgShow(true)}>
+                <a href="/locationdropdown">
                   <p style={{ fontSize: 14 }}>
                     5171 W Campbell Ave undefined Kent,
                     <span>Delivery Address </span>
@@ -1030,9 +1035,7 @@ const Header = ({
                           alt="Evara"
                           src="/assets/imgs/theme/icons/icon-heart.svg"
                         />
-                        <span className="pro-count white">
-                          {totalWishlistItems}
-                        </span>
+                        <span className="pro-count white">{viewwishlist}</span>
                       </a>
                     </Link>
                   </div>
@@ -1166,11 +1169,11 @@ const Header = ({
                   <div className="col-lg-12 col-md-12">
                     <div className="input-style mb-20">
                       <label>Address Title</label>
-                      <input name="name" placeholder="office" type="text" />
+                      {/* <input ref={ref}></input> */}
                     </div>
                   </div>
                   <div className="col-md-12 mt-10 mb-20">
-                    <Location />
+                    <LocationDropdown />
                   </div>
                   <div className="col-md-12">
                     <div className="input-style mb-20">

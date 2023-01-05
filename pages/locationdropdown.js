@@ -1,80 +1,43 @@
-// Imports
-import React, { Component } from "react";
+import Layout from "./../components/layout/Layout";
+import { usePlacesWidget } from "react-google-autocomplete";
 
-// Import Search Bar Components
-import SearchBar from "material-ui-search-bar";
-
-// Import React Scrit Libraray to load Google object
-import Script from "react-load-script";
-
-class LocationDropdown extends Component {
-  // Define Constructor
-  constructor(props) {
-    super(props);
-
-    // Declare State
-    this.state = {
-      city: "",
-      query: "",
-    };
-  }
-
-  handleScriptLoad = () => {
-    // Declare Options For Autocomplete
-    const options = {
-      types: ["(cities)"],
-    };
-
-    // Initialize Google Autocomplete
-    /*global google*/ // To disable any eslint 'google not defined' errors
-    this.autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById("autocomplete"),
-      options
-    );
-
-    // Avoid paying for data that you don't need by restricting the set of
-    // place fields that are returned to just the address components and formatted
-    // address.
-    this.autocomplete.setFields(["address_components", "formatted_address"]);
-
-    // Fire Event when a suggested name is selected
-    this.autocomplete.addListener("place_changed", this.handlePlaceSelect);
-  };
-
-  handlePlaceSelect = () => {
-    // Extract City From Address Object
-    const addressObject = this.autocomplete.getPlace();
-    const address = addressObject.address_components;
-
-    // Check if address is valid
-    if (address) {
-      // Set State
-      this.setState({
-        city: address[0].long_name,
-        query: addressObject.formatted_address,
-      });
-    }
-  };
-
-  render() {
-    return (
-      <div>
-        <Script
-          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhNz0yWvFBAOb8IuaKiqzZo7eRqz7BCN4&libraries=places"
-          onLoad={this.handleScriptLoad}
-        />
-        <SearchBar
-          id="autocomplete"
-          placeholder="Search City"
-          value={this.state.city}
-          style={{
-            margin: "0 auto",
-            maxWidth: 800,
-          }}
-        />
-      </div>
-    );
-  }
+function LocationDropdown() {
+  const { ref, autocompleteRef } = usePlacesWidget({
+    apiKey: "AIzaSyDnDczEoeUwf7bN5b_-223uvrecPVfzggE",
+    onPlaceSelected: (place) => {
+      console.log(place);
+    },
+  });
+  return (
+    <Layout parent="Home" sub="Find Location">
+      <>
+        <section className="mt-40 mb-50">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="bx-place">
+                  <form>
+                    <div className="text-center">
+                      <img
+                        src="/assets/imgs/theme/location-img.png"
+                        alt=""
+                        width={200}
+                      />
+                    </div>
+                    <h4 className="mb-3">Find Location</h4>
+                    <input ref={ref}></input>
+                    <button className="btn btn-heading btn-block hover-up mt-3">
+                      Submit
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </>
+    </Layout>
+  );
 }
 
 export default LocationDropdown;

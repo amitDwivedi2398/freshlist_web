@@ -30,11 +30,16 @@ const Layout = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg8bRuV-VrBPOB2KOtMJ7mrGkD8trhoZM"></Script>
+      {/* <Script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg8bRuV-VrBPOB2KOtMJ7mrGkD8trhoZM"></Script> */}
 
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhNz0yWvFBAOb8IuaKiqzZo7eRqz7BCN4"></script>
+      {/* <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhNz0yWvFBAOb8IuaKiqzZo7eRqz7BCN4"></script> */}
 
-      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+      {/* <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script> */}
+
+      <script
+        type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Museum%20of%20Contemporary%20Art%20Australia&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=AIzaSyDnDczEoeUwf7bN5b_-223uvrecPVfzggE"
+      ></script>
 
       {isToggled && (
         <div className="body-overlay-1" onClick={toggleClick}></div>

@@ -9,10 +9,11 @@ function Login() {
   const [input, setInput] = useState("");
   const [password, setPassword] = useState("");
   console.log(input, password);
+
   const handleLogin = (e) => {
     e.preventDefault();
-    // localStorage.setItem("mobile", input);
 
+    // localStorage.setItem("mobile", input);
     axios
       .post(`http://3.6.37.16:8000/user/login`, {
         mobile: input,
@@ -82,7 +83,7 @@ function Login() {
                               type="password"
                               required=""
                               name=""
-                              placeholder="Please Enter Your Mobile Number"
+                              placeholder="Password"
                               onChange={(e) => {
                                 setPassword(e.target.value);
                               }}

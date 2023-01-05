@@ -15,6 +15,7 @@ function CompleteRegister() {
   const handleCompletelogin = (e) => {
     e.preventDefault();
     const LoginId = localStorage.getItem("LoginId");
+    console.log(user, email, password, cpassword, LoginId);
 
     axios
       .post(`http://3.6.37.16:8000/user/userRegister/${LoginId}`, {

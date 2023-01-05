@@ -49,14 +49,32 @@ const ProductLists = ({
       });
   };
 
-  const handleCompare = (product) => {
-    addToCompare(product);
-    toast("Added to Compare list !");
-  };
+  // const handleCompare = (product) => {
+  //   addToCompare(product);
+  //   toast("Added to Compare list !");
+  // };
 
-  const handleWishlist = (product) => {
-    addToWishlist(product);
-    toast("Added to Wishlist !");
+  const handleWishlist = (data) => {
+    const userId = localStorage.getItem("userId");
+
+    axios
+      .post(`http://3.6.37.16:8000/admin/addwishlist`, {
+        customer: userId,
+        product: data._id,
+      })
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.msg == "success") {
+          toast("Product Added Wishlist Successfully");
+          // getviewcart();
+        } else {
+          toast("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const getAllProduct = () => {
@@ -83,7 +101,7 @@ const ProductLists = ({
             slidesPerView={5}
             spaceBetween={20}
             breakpoints={{
-              480: {
+              320: {
                 slidesPerView: 1,
               },
               640: {
@@ -137,6 +155,14 @@ const ProductLists = ({
                             </Link>
                           </div>
                           <div className="product-action-1">
+                            <a
+                              aria-label="Add To Wishlist"
+                              className="action-btn hover-up"
+                              // onClick={(e) => handleWishlist(data)}
+                              onClick={() => handleWishlist(data)}
+                            >
+                              <i className="fi-rs-heart"></i>
+                            </a>
                             {/* <a
                               aria-label="Quick view"
                               className="action-btn hover-up"
@@ -162,9 +188,9 @@ const ProductLists = ({
                           </div>
 
                           <div className="product-badges product-badges-position product-badges-mrg">
-                            <span className="hot">Hot</span>
-                            <span className="new">New</span>
-                            <span className="best">Best Sell</span>
+                            <span className="hot">{data.type}</span>
+                            {/* <span className="new">New</span>
+                            <span className="best">Best Sell</span> */}
                           </div>
                         </div>
                         <div className="product-content-wrap">
