@@ -6735,6 +6735,10 @@ h6.post-title {
   width: 100%;
   max-width: 25px;
 }
+.header-action-2 .header-action-icon-2 > a img.svgInjec {
+  width: 100%;
+  max-width: 25px;
+}
 
 .header-action-2 .header-action-icon-2 > a span {
   font-size: 14px;
@@ -7984,8 +7988,8 @@ h6.post-title {
 }
 
 .hotline img {
-  min-width: 35px;
-  margin-right: 12px;
+  min-width: 30px;
+  margin-right: 2px;
 }
 
 .hotline p {
@@ -8193,12 +8197,13 @@ h6.post-title {
 }
 
 .header-style-1 .search-style-2 form input {
-  max-width: 600px;
+  /* max-width: 600px; */
   border-width: 0px;
   border-radius: 0 5px 5px 0;
   margin-left: 20px;
   background-color: #fff;
   border: none;
+  max-width: 664px;
 }
 
 .header-style-1 .header-bottom-bg-color {
@@ -8789,7 +8794,10 @@ span.fi-rs-apps {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  min-width: 200px;
+  min-width: 300px;
+}
+.d-flex.categori-dropdown-inner ul {
+  width: 100%;
 }
 
 .categories-dropdown-active-large {
@@ -12374,6 +12382,13 @@ footer .hotline img {
 
 /* rohit css */
 
+img.img-profile {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  margin-bottom: 15px;
+}
+
 /* location popup */
 
 .bx-place {
@@ -12444,8 +12459,8 @@ ul.dropdown-menu.drp-menu {
   width: 248px;
   padding: 10px;
   z-index: 9999999;
-  position: relative;
-  top: 100px;
+  /* position: relative;
+  top: 100px; */
 }
 textarea.wt-1 {
   min-height: 80px;

@@ -26,17 +26,15 @@ const CategoryProduct2 = ({ updateProductCategory }) => {
 
   // subcategory
   const getSubCategory = () => {
-    axios
-      .get(
-        `http://3.6.37.16:8000/admin/productby_category/6391c600e7cf9ef22a943a56`
-      )
-      .then((res) => {
-        console.log(res.data.data);
-        setsubcategory(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .get(`http://3.6.37.16:8000/admin/productby_category/${catid}`)
+    //   .then((res) => {
+    //     console.log(res.data.data);
+    //     setsubcategory(res.data.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   useEffect(() => {
@@ -45,46 +43,42 @@ const CategoryProduct2 = ({ updateProductCategory }) => {
 
   const router = useRouter();
 
-  // const removeSearchTerm = () => {
-  //     router.push({
-  //         pathname: "/products",
-  //     });
-  // };
-
-  const selectCategory = (e, category) => {
-    e.preventDefault();
-    // removeSearchTerm();
-    updateProductCategory(category);
-    router.push({
-      pathname: "/products",
-      query: {
-        cat: category,
-      },
-    });
+  const selectCategory = (id) => {
+    axios
+      .get(`http://3.6.37.16:8000/admin/productby_category/${id}`)
+      .then((res) => {
+        console.log(res.data.data);
+        setsubcategory(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // updateProductCategory(category);
+    // router.push({
+    //   pathname: "/products",
+    //   query: {
+    //     cat: category,
+    //   },
+    // });
   };
   return (
     <>
-      <ul>
-        {/* <li onClick={(e) => selectCategory(e, "jeans")} className="dropdown"> */}
-        {category !== ""
+      {/* <li onClick={(e) => selectCategory(e, "jeans")} className="dropdown"> */}
+
+      {/* {category !== ""
           ? category?.map((data) => (
               <>
-                <li
-                  value={data?.title}
-                  key={data?._id}
-                  onClick={(e) => selectCategory(e, value)}
-                  className="dropdown"
-                >
+                <li key={data?._id} className="dropdown">
                   <a
-                    className="dropdown-toggle"
-                    data-toggle="dropdown"
-                    role="button"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                    // className="dropdown-toggle "
+                    // data-toggle="dropdown"
+                    type="button"
+                    // aria-haspopup="true"
+                    onMouseEnter={selectCategory(data?._id)}
+                    // aria-expanded="false"
                   >
                     <img src={data.image} alt="" />
                     {data?.category_name}
-                    {/* Milks & Dairies */}
                   </a>
                   <ul className="dropdown-menu drp-menu">
                     {subcategory !== ""
@@ -103,42 +97,147 @@ const CategoryProduct2 = ({ updateProductCategory }) => {
                 </li>
               </>
             ))
+          : null} */}
+      <ul>
+        {category !== ""
+          ? category?.map((data) => (
+              <li
+                key={data?._id}
+                onMouseEnter={() => {
+                  selectCategory(data?._id);
+                }}
+                className="dropdown d-flex"
+              >
+                <img
+                  src={data?.image}
+                  className=" imagetext"
+                  style={{ width: "35px" }}
+                  alt=""
+                />
+                <span className=" d-flex cattitle" style={{ width: "100%" }}>
+                  {data?.category_name}
+                </span>
+                {/* {data?.category_name} */}
+                <ul className="dropdown-menu drp-menu">
+                  {subcategory !== ""
+                    ? subcategory?.map((data) => (
+                        <li onClick={() => selectCategory(data?._id)}>
+                          <a>
+                            <img
+                              src={data?.image}
+                              alt=""
+                              style={{ width: "25px" }}
+                            />
+                            {data?.subcategory_name}
+                          </a>
+                        </li>
+                      ))
+                    : null}
+                  {/* <li onClick={(e) => selectCategory(e, "shoe")}>
+                      <a>
+                        <img
+                          src="/assets/imgs/theme/icons/category-2.svg"
+                          alt=""
+                        />
+                        Clothing
+                      </a>
+                    </li> */}
+                  {/* <li>
+                      <a
+                        onClick={() => {
+                          console.log("eeee");
+                        }}
+                        href="#"
+                      >
+                        {" "}
+                        <img
+                          src="/assets/imgs/theme/icons/category-1.svg"
+                          alt=""
+                          width={20}
+                        />
+                        Action
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <img
+                          src="/assets/imgs/theme/icons/category-1.svg"
+                          alt=""
+                          width={20}
+                        />
+                        Action
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <img
+                          src="/assets/imgs/theme/icons/category-1.svg"
+                          alt=""
+                          width={20}
+                        />
+                        Action
+                      </a>
+                    </li> */}
+                </ul>
+              </li>
+            ))
           : null}
-
-        {/* <ul className="dropdown-menu drp-menu">
-            <li>
-              <a href="#">
-                <img
-                  src="/assets/imgs/theme/icons/category-1.svg"
-                  alt=""
-                  width={20}
-                />
-                Action
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <img
-                  src="/assets/imgs/theme/icons/category-1.svg"
-                  alt=""
-                  width={20}
-                />
-                Action
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <img
-                  src="/assets/imgs/theme/icons/category-1.svg"
-                  alt=""
-                  width={20}
-                />
-                Action
-              </a>
-            </li>
-          </ul> */}
-        {/* </li> */}
-        {/* <li onClick={(e) => selectCategory(e, "shoe")}>
+        {/* <li className="dropdown">
+            <img
+              onMouseEnter={() => console.log("eeeeeeeeeeeeeeeeeee")}
+              src="/assets/imgs/theme/icons/category-2.svg"
+              className="mx-2"
+              style={{ width: "35px" }}
+              alt=""
+            />
+            hello
+            <ul className="dropdown-menu drp-menu">
+              <li onClick={(e) => selectCategory(e, "shoe")}>
+                <a>
+                  <img src="/assets/imgs/theme/icons/category-2.svg" alt="" />
+                  Clothing
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => {
+                    console.log("eeee");
+                  }}
+                  href="#"
+                >
+                  {" "}
+                  <img
+                    src="/assets/imgs/theme/icons/category-1.svg"
+                    alt=""
+                    width={20}
+                  />
+                  Action
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img
+                    src="/assets/imgs/theme/icons/category-1.svg"
+                    alt=""
+                    width={20}
+                  />
+                  Action
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img
+                    src="/assets/imgs/theme/icons/category-1.svg"
+                    alt=""
+                    width={20}
+                  />
+                  Action
+                </a>
+              </li>
+            </ul>
+          </li> */}
+      </ul>
+      {/* <li onClick={(e) => selectCategory(e, "shoe")}>
           <a>
             <img src="/assets/imgs/theme/icons/category-2.svg" alt="" />
             Clothing
@@ -192,7 +291,6 @@ const CategoryProduct2 = ({ updateProductCategory }) => {
             Fresh
           </a>
         </li> */}
-      </ul>
     </>
   );
 };

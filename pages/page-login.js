@@ -8,11 +8,9 @@ import { toast } from "react-toastify";
 function Login() {
   const [input, setInput] = useState("");
   const [password, setPassword] = useState("");
-  console.log(input, password);
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     // localStorage.setItem("mobile", input);
     axios
       .post(`http://3.6.37.16:8000/user/login`, {
@@ -25,15 +23,15 @@ function Login() {
         localStorage.setItem("userId", res.data.user._id);
         console.log(res.data.token);
         const token = res.data.token;
-        //   setToken(res.data.token)
+
         localStorage.setItem("token", token);
-        if (res.data.msg == "login success") {
+        if (res.data.msg == "success") {
           toast("login success !");
           Router.push("/");
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response);
       });
   };
 
@@ -59,7 +57,7 @@ function Login() {
                           <h1 className="mb-5">Login</h1>
                           <p className="mb-30">
                             Don't have an account?{" "}
-                            <Link href="/page-register">
+                            <Link href="/registration">
                               <a>Create here</a>
                             </Link>
                           </p>

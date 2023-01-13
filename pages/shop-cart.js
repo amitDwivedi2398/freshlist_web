@@ -149,7 +149,9 @@ const Cart = ({
                             </div>
                           </td>
                           <td className="price" data-title="Price">
-                            <h4 className="text-brand">${data.product?.mrp}</h4>
+                            <h4 className="text-brand">
+                              &#8377;{data.product?.mrp}
+                            </h4>
                           </td>
                           <td
                             className="text-center detail-info"
@@ -180,7 +182,9 @@ const Cart = ({
                             </div>
                           </td>
                           <td className="text-right" data-title="Cart">
-                            <h4 className="text-body">${data.subtotal}</h4>
+                            <h4 className="text-body">
+                              &#8377;{data.subtotal}
+                            </h4>
                           </td>
                           <td className="action" data-title="Remove">
                             <a

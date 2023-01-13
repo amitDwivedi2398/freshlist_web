@@ -43,7 +43,7 @@ const BlogGrid = ({ show, wide }) => {
               <a>
                 <img
                   className="border-radius-15"
-                  src={data.thumbnail_img}
+                  src={data?.thumbnail_img}
                   alt=""
                 />
               </a>
@@ -59,22 +59,22 @@ const BlogGrid = ({ show, wide }) => {
           <div className="entry-content-2">
             <h6 className="mb-10 font-sm">
               <Link href="/blog-category-grid">
-                <a className="entry-meta text-muted">{data.blog_category}</a>
+                <a className="entry-meta text-muted">{data?.blog_category}</a>
               </Link>
             </h6>
             <h4 className="post-title mb-15">
               <Link href="/blog-post-right">
-                <a>{data.title}</a>
+                <a>{data?.title}</a>
               </Link>
             </h4>
             <p className="mt-10 mb-15">
               <Link href="/blog-post-right">
-                <a>{data.desc}</a>
+                <a>{data?.desc}</a>
               </Link>
             </p>
             <div className="entry-meta font-xs color-grey mt-10 pb-10">
               <div>
-                <span className="post-on mr-10">{data.date}</span>
+                <span className="post-on mr-10">{data?.date}</span>
                 {/* <span className="hit-count has-dot mr-10">126k Views</span> */}
                 {/* <span className="hit-count has-dot">4 mins read</span> */}
               </div>

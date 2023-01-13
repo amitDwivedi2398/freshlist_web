@@ -79,103 +79,106 @@ SwiperCore.use([Navigation, Autoplay]);
 //     }
 // ];
 const CategorySlider = () => {
+  const [category, setcategory] = useState([]);
 
-    const [category, setcategory] = useState([]);
+  const router = useRouter();
 
-    const router = useRouter();
-
-     const selectCategory = (e, category) => {
-        e.preventDefault();
+  const selectCategory = (e, category) => {
+    e.preventDefault();
     //     // removeSearchTerm();
-        updateProductCategory(category);
-        router.push({
-            pathname: "/products",
-           query: {
-                cat: category //
-            }
-       });
+    updateProductCategory(category);
+    router.push({
+      pathname: "/products",
+      query: {
+        cat: category, //
+      },
+    });
 
-        console.log("Click");
-     };
+    console.log("Click");
+  };
 
+  //allcategory
+  const getAllCategory = () => {
+    axios
+      .get(`http://3.6.37.16:8000/admin/getallcategory`)
+      .then((res) => {
+        console.log(res.data.data);
+        setcategory(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getAllCategory();
+  }, []);
 
-    //allcategory
-    const getAllCategory = () => {
-        axios
-            .get(`http://3.6.37.16:8000/admin/getallcategory`)
-            .then((res) => {
-              console.log(res.data.data);
-              setcategory(res.data.data);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        };
-        useEffect(() => {
-          getAllCategory();
-        }, []);
-
-    return (
-        <>
-            <Swiper
-                autoplay={true}
-                navigation={{
-                    prevEl: ".custom_prev_ct1",
-                    nextEl: ".custom_next_ct1"
-                }}
-                className="custom-class"
-                breakpoints={{
-                    320: {
-                        slidesPerView: 3
-                    },
-                    480: {
-                        slidesPerView: 3
-                    },
-                    640: {
-                        slidesPerView: 3
-                    },
-                    768: {
-                        slidesPerView: 5
-                    },
-                    1024: {
-                        slidesPerView: 8
-                    },
-                    1200: {
-                        slidesPerView: 10
-                    }
-                }}
+  return (
+    <>
+      <Swiper
+        autoplay={true}
+        navigation={{
+          prevEl: ".custom_prev_ct1",
+          nextEl: ".custom_next_ct1",
+        }}
+        className="custom-class"
+        breakpoints={{
+          320: {
+            slidesPerView: 3,
+          },
+          480: {
+            slidesPerView: 3,
+          },
+          640: {
+            slidesPerView: 3,
+          },
+          768: {
+            slidesPerView: 5,
+          },
+          1024: {
+            slidesPerView: 6,
+          },
+          1200: {
+            slidesPerView: 6,
+          },
+        }}
+      >
+        {category.map((data, i) => (
+          <SwiperSlide key={i}>
+            <div
+              className={`card-2 ${data.bg} wow animate__animated animate__fadeInUp`}
+              onClick={(e) => selectCategory(e, data.slug)}
             >
-                {category.map((data, i) => (
-                    <SwiperSlide key={i}>
-                        <div className={`card-2 ${data.bg} wow animate__animated animate__fadeInUp`} onClick={(e) => selectCategory(e, data.slug)}>
-                            <figure className=" img-hover-scale overflow-hidden">
-                                <a>
-                                    <img src={data.image} alt="" />
-                                </a>
-                            </figure>
-                            <h6>
-                                <a>{data.category_name}</a>
-                            </h6>
-                            <span>26 items</span>
-                        </div>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-
-            <div className="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow" id="carausel-10-columns-arrows">
-                <span className="slider-btn slider-prev slick-arrow custom_prev_ct1">
-                    <i className="fi-rs-arrow-small-left"></i>
-                </span>
-                <span className="slider-btn slider-next slick-arrow custom_next_ct1">
-                    <i className="fi-rs-arrow-small-right"></i>
-                </span>
+              <figure className=" img-hover-scale overflow-hidden">
+                <a>
+                  <img src={data.image} alt="" />
+                </a>
+              </figure>
+              <h6>
+                <a>{data.category_name}</a>
+              </h6>
+              <span>26 items</span>
             </div>
-        </>
-    );
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      <div
+        className="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow"
+        id="carausel-10-columns-arrows"
+      >
+        <span className="slider-btn slider-prev slick-arrow custom_prev_ct1">
+          <i className="fi-rs-arrow-small-left"></i>
+        </span>
+        <span className="slider-btn slider-next slick-arrow custom_next_ct1">
+          <i className="fi-rs-arrow-small-right"></i>
+        </span>
+      </div>
+    </>
+  );
 };
 
 export default connect(null, { updateProductCategory })(CategorySlider);
-
 
 // import SwiperCore, { Navigation } from "swiper";
 // import { Swiper, SwiperSlide } from "swiper/react";
@@ -188,7 +191,7 @@ export default connect(null, { updateProductCategory })(CategorySlider);
 //             <Swiper
 //                 slidesPerView={1}
 //                 spaceBetween={30}
-//                 
+//
 //                 navigation={{
 //                     prevEl: ".custom_prev",
 //                     nextEl: ".custom_next",

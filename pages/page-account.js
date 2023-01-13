@@ -2,9 +2,19 @@ import Layout from "../components/layout/Layout";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Account() {
   const [activeIndex, setActiveIndex] = useState(1);
+  const [customer, setCustomer] = useState({});
+  const [userorder, setUserorder] = useState({});
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [image, setImage] = useState({});
+  const [mobile, setMobile] = useState("");
+  const [currentpass, setcurrentPass] = useState("");
+  const [newpass, setnewpass] = useState("");
+  const [newcpass, setnewcpass] = useState("");
 
   const handleOnClick = (index) => {
     setActiveIndex(index); // remove the curly braces
@@ -17,12 +27,9 @@ function Account() {
     window.location.replace("/");
   };
 
-  const [customer, setCustomer] = useState({});
-  const [userorder, setUserorder] = useState({});
-
   const fetchuserorder = () => {
     const userId = localStorage.getItem("userId");
-    console.log(userId);
+    // console.log(userId);
     axios
       .get(`http://3.6.37.16:8000/admin/customer_order_list/${userId}`)
       .then((response) => {
@@ -31,6 +38,68 @@ function Account() {
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  const handlePassEdit = (e) => {
+    e.preventDefault();
+    const userId = localStorage.getItem("userId");
+    if (newpass == newcpass) {
+      axios
+        .post(`http://3.6.37.16:8000/user/resetPassword/${userId}`, {
+          oldpassword: currentpass,
+          password: newpass,
+          cnfrmPassword: newcpass,
+        })
+        .then((res) => {
+          console.log(res.data.data);
+          if (res.data.msg == "success") {
+            toast("Password Change Successfully");
+          }
+        })
+
+        .catch((err) => {
+          console.log(err);
+          if (err.response.data.msg == "Old Password not matched") {
+            toast("Old password does not match");
+          }
+        });
+    } else {
+      toast("New & confirm Password does not match ");
+    }
+  };
+
+  // edituser
+  const handleProfileEdit = (e) => {
+    e.preventDefault();
+    const userId = localStorage.getItem("userId");
+
+    const data = new FormData();
+    data.append("username", username);
+    data.append("email", email);
+    if (image !== "") {
+      data.append("image", image);
+    }
+    data.append("mobile", mobile);
+
+    axios
+      .post(`http://3.6.37.16:8000/user/edituser/${userId}`, data)
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.msg == "success") {
+          toast("Accout details changed Successfully");
+          // Router.push("/page-login");
+          setUsername("");
+          setEmail("");
+          setMobile("");
+          setImage("");
+        } else {
+          toast("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -100,6 +169,17 @@ function Account() {
                         <li className="nav-item">
                           <a
                             className={
+                              activeIndex === 9 ? "nav-link active" : "nav-link"
+                            }
+                            onClick={() => handleOnClick(9)}
+                          >
+                            <i className="fi-rs-shopping-cart-check mr-10"></i>
+                            Return Product
+                          </a>
+                        </li>
+                        <li className="nav-item">
+                          <a
+                            className={
                               activeIndex === 4 ? "nav-link active" : "nav-link"
                             }
                             onClick={() => handleOnClick(4)}
@@ -124,7 +204,43 @@ function Account() {
                             }
                             onClick={() => handleOnClick(6)}
                           >
-                            <i className="fi-rs-user mr-10"></i>Wallet
+                            <i className="fi-rs-user mr-10"></i>My Wallet
+                          </a>
+                        </li>
+                        <li className="nav-item">
+                          <a
+                            className={
+                              activeIndex === 10
+                                ? "nav-link active"
+                                : "nav-link"
+                            }
+                            onClick={() => handleOnClick(10)}
+                          >
+                            <i className="fi-rs-user mr-10"></i>
+                            Your Subscriptions
+                          </a>
+                        </li>
+                        <li className="nav-item">
+                          <a
+                            className={
+                              activeIndex === 11
+                                ? "nav-link active"
+                                : "nav-link"
+                            }
+                            onClick={() => handleOnClick(11)}
+                          >
+                            <i className="fi-rs-user mr-10"></i>
+                            Support Ticket
+                          </a>
+                        </li>
+                        <li className="nav-item">
+                          <a
+                            className={
+                              activeIndex === 8 ? "nav-link active" : "nav-link"
+                            }
+                            onClick={() => handleOnClick(8)}
+                          >
+                            <i className="fi-rs-user mr-10"></i>My Reward Points
                           </a>
                         </li>
                         <li className="nav-item">
@@ -162,6 +278,11 @@ function Account() {
                       >
                         <div className="card">
                           <div className="card-header">
+                            <img
+                              src={customer.image}
+                              alt=""
+                              className="img-profile"
+                            />
                             <h3 className="mb-0">
                               Hello, {customer?.username}
                             </h3>
@@ -249,8 +370,8 @@ function Account() {
                                             <td>
                                               {data.product?.product_name}
                                             </td>
-                                            <td>March 45, 2020</td>
-                                            <td>${data.product?.mrp}</td>
+
+                                            <td>&#8377;{data.product?.mrp}</td>
                                             <td>{data.status}</td>
                                             <td>
                                               <a
@@ -386,17 +507,22 @@ function Account() {
                             <h5>Account Edit</h5>
                           </div>
                           <div className="card-body">
-                            <form method="post" name="enq">
+                            <form method="post">
                               <div className="row">
                                 <div className="form-group col-md-12">
                                   <label>
                                     Username <span className="required">*</span>
                                   </label>
                                   <input
-                                    required=""
+                                    required
                                     className="form-control"
-                                    name="name"
+                                    name="username"
                                     type="text"
+                                    onChange={(e) => {
+                                      setUsername(e.target.value);
+                                    }}
+                                    value={username}
+                                    placeholder="UserName"
                                   />
                                 </div>
                                 {/* <div className="form-group col-md-6">
@@ -424,62 +550,128 @@ function Account() {
                                 </div> */}
                                 <div className="form-group col-md-12">
                                   <label>
+                                    User Image
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    className="form-control py-3"
+                                    type="file"
+                                    // value={image}
+                                    required=""
+                                    name="image"
+                                    onChange={(e) => {
+                                      setImage(e.target.files[0]);
+                                    }}
+                                    placeholder="Mobile Number"
+                                  />
+                                </div>
+                                <div className="form-group col-md-12">
+                                  <label>
+                                    Mobile Number{" "}
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={mobile}
+                                    required=""
+                                    name="mobile"
+                                    onChange={(e) => {
+                                      setMobile(e.target.value);
+                                    }}
+                                    placeholder="Mobile Number"
+                                  />
+                                </div>
+                                <div className="form-group col-md-12">
+                                  <label>
                                     Email Address{" "}
                                     <span className="required">*</span>
                                   </label>
                                   <input
-                                    required=""
-                                    className="form-control"
-                                    name="email"
                                     type="email"
-                                  />
-                                </div>
-                                <div className="form-group col-md-12">
-                                  <label>
-                                    Current Password{" "}
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
+                                    value={email}
                                     required=""
-                                    className="form-control"
-                                    name="password"
-                                    type="password"
-                                  />
-                                </div>
-                                <div className="form-group col-md-12">
-                                  <label>
-                                    New Password{" "}
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    required=""
-                                    className="form-control"
-                                    name="npassword"
-                                    type="password"
-                                  />
-                                </div>
-                                <div className="form-group col-md-12">
-                                  <label>
-                                    Confirm Password{" "}
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    required=""
-                                    className="form-control"
-                                    name="cpassword"
-                                    type="password"
+                                    name="email"
+                                    onChange={(e) => {
+                                      setEmail(e.target.value);
+                                    }}
+                                    placeholder="Email"
                                   />
                                 </div>
                                 <div className="col-md-12">
                                   <button
                                     type="submit"
-                                    className="btn btn-fill-out submit font-weight-bold"
+                                    onClick={handleProfileEdit}
+                                    className="btn btn-fill-out submit font-weight-bold mb-3"
                                     name="submit"
                                     value="Submit"
                                   >
                                     Save Change
                                   </button>
                                 </div>
+                                <section className="card mt-3 ">
+                                  <h3 className="d-flex justify-content-left mb-3">
+                                    Change Password
+                                  </h3>
+                                  <div className="form-group col-md-12">
+                                    <label>
+                                      Current Password
+                                      <span className="required">*</span>
+                                    </label>
+                                    <input
+                                      required
+                                      className="form-control"
+                                      name="password"
+                                      type="password"
+                                      value={currentpass}
+                                      onChange={(e) => {
+                                        setcurrentPass(e.target.value);
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="form-group col-md-12">
+                                    <label>
+                                      New Password
+                                      <span className="required">*</span>
+                                    </label>
+                                    <input
+                                      required
+                                      className="form-control"
+                                      name="npassword"
+                                      type="password"
+                                      value={newpass}
+                                      onChange={(e) => {
+                                        setnewpass(e.target.value);
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="form-group col-md-12">
+                                    <label>
+                                      Confirm Password{" "}
+                                      <span className="required">*</span>
+                                    </label>
+                                    <input
+                                      onChange={(e) => {
+                                        setnewcpass(e.target.value);
+                                      }}
+                                      value={newcpass}
+                                      required
+                                      className="form-control"
+                                      name="cpassword"
+                                      type="password"
+                                    />
+                                  </div>
+                                  <div className="col-md-12">
+                                    <button
+                                      type="submit"
+                                      onClick={handlePassEdit}
+                                      className="btn btn-fill-out submit font-weight-bold"
+                                      name="submit"
+                                      value="Submit"
+                                    >
+                                      Update Password
+                                    </button>
+                                  </div>
+                                </section>
                               </div>
                             </form>
                           </div>
@@ -603,6 +795,280 @@ function Account() {
                                     <td>3</td>
                                     <td>March 45, 2020</td>
                                     <td>$125.00 for 2 item</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className={
+                          activeIndex === 8
+                            ? "tab-pane fade active show"
+                            : "tab-pane fade "
+                        }
+                      >
+                        <div className="card">
+                          <div className="card-header">
+                            <h5>Your total number of reward points is: 0.</h5>
+                          </div>
+                          <div className="card-body">
+                            <div className="table-responsive">
+                              <table className="table">
+                                <thead>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Date added</th>
+                                    <th>Description</th>
+                                    <th>Total Earning</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>$125.00 for 2 item</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>$125.00 for 2 item</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>$125.00 for 2 item</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          activeIndex === 9
+                            ? "tab-pane fade active show"
+                            : "tab-pane fade "
+                        }
+                      >
+                        <div className="card">
+                          <div className="card-header">
+                            <h5>Your total number of reward points is: 0.</h5>
+                          </div>
+                          <div className="card-body">
+                            <div className="table-responsive">
+                              <table className="table">
+                                <thead>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Date added</th>
+                                    <th>Product Id</th>
+                                    <th>Product Name</th>
+                                    {/* <th>Description</th> */}
+                                    <th>Price</th>
+                                    {/* <th>Status</th> */}
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>12/10/2023</td>
+                                    <td>4452020</td>
+                                    <td>mobile purchase</td>
+                                    <td>$125.00 for 2 item</td>
+                                    {/* <td>Done</td> */}
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Return
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2</td>
+                                    <td>12/10/2023</td>
+                                    <td>545442020</td>
+                                    <td>mobile purchase</td>
+                                    <td>$125.00 for 2 item</td>
+                                    {/* <td>Done</td> */}
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Return
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3</td>
+                                    <td>12/10/2023</td>
+                                    <td>45352020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>$125.00 for 2 item</td>
+                                    {/* <td>Done</td> */}
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Return
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          activeIndex === 10
+                            ? "tab-pane fade active show"
+                            : "tab-pane fade "
+                        }
+                      >
+                        <div className="card">
+                          <div className="card-header">
+                            <h5>Your Total Subscriptions list.</h5>
+                          </div>
+                          <div className="card-body">
+                            <div className="table-responsive">
+                              <table className="table">
+                                <thead>
+                                  <tr>
+                                    <th># S No.</th>
+                                    <th>Date added</th>
+                                    <th>Subscribed Product</th>
+                                    <th>Validity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>2 month</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>2 month</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>2 month</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          activeIndex === 11
+                            ? "tab-pane fade active show"
+                            : "tab-pane fade "
+                        }
+                      >
+                        <div className="card">
+                          <div className="card-header">
+                            <h5>Your Support Ticket</h5>
+                          </div>
+                          <div className="card-body">
+                            <div className="table-responsive">
+                              <table className="table">
+                                <thead>
+                                  <tr>
+                                    <th># S No.</th>
+                                    <th>Date Added</th>
+                                    <th>Ticket No.</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>2 month</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>2 month</td>
+                                    <td>Done</td>
+                                    <td>
+                                      <a href="#" className="btn-small d-block">
+                                        Delete
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3</td>
+                                    <td>March 45, 2020</td>
+                                    <td>for bulk purchase</td>
+                                    <td>2 month</td>
                                     <td>Done</td>
                                     <td>
                                       <a href="#" className="btn-small d-block">

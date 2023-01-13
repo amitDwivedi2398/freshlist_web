@@ -135,7 +135,9 @@ const Wishlist = ({}) => {
                             </div>
                           </td>
                           <td className="price" data-title="Price">
-                            <h3 className="text-brand">${data.product?.mrp}</h3>
+                            <h3 className="text-brand">
+                              &#8377;{data.product?.mrp}
+                            </h3>
                           </td>
                           {/* <td className="price" data-title="Price">
                             <h3 className="text-brand">
@@ -171,8 +173,15 @@ const Wishlist = ({}) => {
                             )}
                           </td>
                           <td className="action" data-title="Remove">
-                            <a onClick={(e) => deleteFromWish(data._id)}>
-                              <i className="fi-rs-trash"></i>
+                            <a
+                              className="justify-content-center"
+                              onClick={(e) => deleteFromWish(data._id)}
+                            >
+                              <i
+                                size="50px"
+                                style={{ color: "red" }}
+                                className="fi-rs-trash"
+                              ></i>
                             </a>
                           </td>
                         </tr>

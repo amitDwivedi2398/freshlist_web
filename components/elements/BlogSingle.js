@@ -3,13 +3,60 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import React from "react";
+import { toast } from "react-toastify";
+import moment from "moment";
 
 const BlogSingle = () => {
   const [blogdetail, setBlogdetail] = useState({});
-
+  const [comment, setComment] = useState("");
+  const [names, setNames] = useState("");
+  const [email, setEmail] = useState("");
+  const [web, setWeb] = useState("");
   const router = useRouter();
   const { id } = router.query;
 
+  const hadleCommentSubmit = (e) => {
+    e.preventDefault();
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
+    const date = new Date().toLocaleDateString();
+
+    axios
+      .post(`http://3.6.37.16:8000/admin/addleave_comment`, {
+        customerId: userId,
+        write_comment: comment,
+        name: names,
+        email: email,
+        date: date,
+        website: web,
+      })
+      .then((res) => {
+        if (res.data.msg == "success") {
+          toast("You Commented Successfully");
+          setComment("");
+          setNames("");
+          setEmail("");
+          setWeb("");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast("some thing went wrong");
+      });
+  };
+
+  const [allcomments, setAllcomments] = useState([]);
+  const getallcomment = () => {
+    axios
+      .get(` http://3.6.37.16:8000/admin/getallleave_comment`)
+      .then((response) => {
+        console.log(response.data.data);
+        setAllcomments(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const fetchBlogdetail = () => {
     axios
       .get(`http://3.6.37.16:8000/admin/viewone_blog/${id}`)
@@ -22,6 +69,7 @@ const BlogSingle = () => {
       });
   };
   useEffect(() => {
+    getallcomment();
     fetchBlogdetail();
   }, []);
 
@@ -220,6 +268,10 @@ const BlogSingle = () => {
                         <div className="col-12">
                           <div className="form-group">
                             <textarea
+                              value={comment}
+                              onChange={(e) => {
+                                setComment(e.target.value);
+                              }}
                               className="form-control w-100"
                               name="comment"
                               id="comment"
@@ -232,6 +284,10 @@ const BlogSingle = () => {
                         <div className="col-sm-6">
                           <div className="form-group">
                             <input
+                              value={names}
+                              onChange={(e) => {
+                                setNames(e.target.value);
+                              }}
                               className="form-control"
                               name="name"
                               id="name"
@@ -243,6 +299,10 @@ const BlogSingle = () => {
                         <div className="col-sm-6">
                           <div className="form-group">
                             <input
+                              value={email}
+                              onChange={(e) => {
+                                setEmail(e.target.value);
+                              }}
                               className="form-control"
                               name="email"
                               id="email"
@@ -254,6 +314,10 @@ const BlogSingle = () => {
                         <div className="col-12">
                           <div className="form-group">
                             <input
+                              value={web}
+                              onChange={(e) => {
+                                setWeb(e.target.value);
+                              }}
                               className="form-control"
                               name="website"
                               id="website"
@@ -266,6 +330,7 @@ const BlogSingle = () => {
                       <div className="form-group">
                         <button
                           type="submit"
+                          onClick={hadleCommentSubmit}
                           className="button button-contactForm"
                         >
                           Post Comment
@@ -275,7 +340,54 @@ const BlogSingle = () => {
                     <div className="comments-area">
                       <h3 className="mb-30">Comments</h3>
                       <div className="comment-list">
-                        <div className="single-comment justify-content-between d-flex mb-30">
+                        {allcomments !== ""
+                          ? allcomments?.map((data) => (
+                              <div
+                                key={data?._id}
+                                className="single-comment justify-content-between d-flex mb-30"
+                              >
+                                <div className="user justify-content-between d-flex">
+                                  <div className="thumb text-center">
+                                    <img
+                                      className="imageofuser"
+                                      alt="Image"
+                                      // style={{ borderRadius: "50%" }}
+                                      src={data?.customerId?.image}
+                                    />
+                                    <Link href="#">
+                                      <a className=" mt-2font-heading text-brand">
+                                        {data?.customerId?.username}
+                                      </a>
+                                    </Link>
+                                  </div>
+                                  <div className="desc">
+                                    <div className="d-flex justify-content-between mb-10">
+                                      <div className="d-flex align-items-center">
+                                        <span className="font-xs text-muted">
+                                          {moment(data?.updatedAt).format(
+                                            "LLL"
+                                          )}
+                                        </span>
+                                      </div>
+                                      <div className="product-rate d-inline-block ">
+                                        <div
+                                          className="product-rating justify-content-right"
+                                          style={{ width: "80%" }}
+                                        ></div>
+                                      </div>
+                                    </div>
+                                    <p className="mb-10">
+                                      {data?.write_comment}
+                                      <Link href="#">
+                                        <a className="reply">Reply</a>
+                                      </Link>
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))
+                          : null}
+                        {/* <div className="single-comment justify-content-between d-flex mb-30">
                           <div className="user justify-content-between d-flex">
                             <div className="thumb text-center">
                               <img
@@ -395,7 +507,7 @@ const BlogSingle = () => {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

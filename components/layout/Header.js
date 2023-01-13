@@ -295,7 +295,7 @@ const Header = ({
                                                 </a>
                                             </Link>
                                         </div> */}
-                    <div className="header-action-icon-2">
+                    {/* <div className="header-action-icon-2">
                       <Link href="/shop-wishlist">
                         <a>
                           <img
@@ -325,9 +325,9 @@ const Header = ({
                           <span className="lable">Cart</span>
                         </a>
                       </Link>
-                    </div>
+                    </div> */}
 
-                    <div className="header-action-icon-2">
+                    {/* <div className="header-action-icon-2">
                       <Link href="#">
                         <a>
                           <img
@@ -419,7 +419,18 @@ const Header = ({
                           )}
                         </ul>
                       </div>
-                    </div>
+                    </div> */}
+                    <img
+                      src="/assets/imgs/theme/mapicon.png"
+                      alt="hotline"
+                      className="map-img"
+                    />
+                    <a href="/locationdropdown">
+                      <p style={{ fontSize: 14 }}>
+                        5171 W Campbell Ave Kent,
+                        <span>Delivery Address </span>
+                      </p>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -991,18 +1002,295 @@ const Header = ({
                   </nav>
                 </div>
               </div>
+
               <div className="hotline d-none d-lg-flex">
-                <img
-                  src="/assets/imgs/theme/mapicon.png"
-                  alt="hotline"
-                  className="map-img"
-                />
-                <a href="/locationdropdown">
-                  <p style={{ fontSize: 14 }}>
-                    5171 W Campbell Ave undefined Kent,
-                    <span>Delivery Address </span>
-                  </p>
-                </a>
+                <div className="header-action-right">
+                  <div className="header-action-2">
+                    {/* <div className="header-action-icon-2">
+                      <Link href="/shop-wishlist">
+                        <a>
+                          <img
+                            className="svgInjec"
+                            alt="Evara"
+                            src="/assets/imgs/theme/icons/icon-heart.svg"
+                          />
+                          <span className="pro-count blue">
+                            {viewwishlist.length !== 0 ? (
+                              <>{viewwishlist}</>
+                            ) : (
+                              <>0</>
+                            )}
+                          </span>
+                        </a>
+                      </Link>
+                      <Link href="/shop-wishlist">
+                        <span className="lable">Wishlist</span>
+                      </Link>
+                    </div> */}
+                    {/* <div className="header-action-icon-2">
+                      <Link href="/shop-cart">
+                        <a className="mini-cart-icon">
+                          <img
+                            alt="Evara"
+                            src="/assets/imgs/theme/icons/icon-cart.svg"
+                          />
+                          <span className="pro-count blue">{viewcart}</span>
+                        </a>
+                      </Link>
+                      <Link href="/shop-cart">
+                        <a>
+                          <span className="lable ">Cart</span>
+                        </a>
+                      </Link>
+                    </div> */}
+                  </div>
+                </div>
+                {/* here */}
+
+                {/* <div className=" mx-3 header-action-icon-2">
+                  <Link href="#">
+                    <a>
+                      <img
+                        className="svgInject"
+                        alt="Nest"
+                        src="/assets/imgs/theme/icons/icon-user.svg"
+                      />
+                    </a>
+                  </Link>
+                  <Link href="#" onClick={(e) => handleClick(e)}>
+                    <a>
+                      <span className="lable ml-0">
+                        {token ? customer?.username : null}
+                      </span>
+                    </a>
+                  </Link>
+                  <div className="  mx-3 cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                    <ul>
+                      {!token ? (
+                        <>
+                          <li>
+                            <Link href="/page-login">
+                              <a>
+                                <i className="fi fi-rs-user mr-10"></i>
+                                login
+                              </a>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/registration">
+                              <a>
+                                <i className="fi fi-rs-user mr-10"></i>
+                                Register
+                              </a>
+                            </Link>
+                          </li>
+                        </>
+                      ) : (
+                        <>
+                          <li>
+                            <Link href="/page-account">
+                              <a>
+                                <i className="fi fi-rs-user mr-10"></i>
+                                My Account
+                              </a>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/page-account">
+                              <a>
+                                <i className="fi fi-rs-location-alt mr-10"></i>
+                                Order Tracking
+                              </a>
+                            </Link>
+                          </li>
+                          
+                          <li>
+                            <Link href="/shop-wishlist">
+                              <a>
+                                <i className="fi fi-rs-heart mr-10"></i>
+                                My Wishlist
+                              </a>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/page-account">
+                              <a>
+                                <i className="fi fi-rs-settings-sliders mr-10"></i>
+                                Setting
+                              </a>
+                            </Link>
+                          </li>
+                          <li>
+                            <button className="lgbtn" onClick={handleLogout}>
+                              Sign Out
+                            </button>
+                          </li>
+                        </>
+                      )}
+                    </ul>
+                  </div>
+                </div> */}
+              </div>
+              <div className="header-action-right">
+                <div className="header-action-2">
+                  {/* <div className="search-location">
+                      <LocationDropdown />
+                    </div> */}
+                  {/* <div className="header-action-icon-2">
+                                            <Link href="/shop-compare">
+                                                <a>
+                                                    <img
+                                                        className="svgInject"
+                                                        alt="Evara"
+                                                        src="/assets/imgs/theme/icons/icon-compare.svg"
+                                                    />
+                                                    <span className="pro-count blue">
+                                                        {totalCompareItems}
+                                                    </span>
+                                                </a>
+                                            </Link>
+                                            <Link href="/shop-compare">
+                                                <a>
+                                                    <span className="lable ml-0">
+                                                        Compare
+                                                    </span>
+                                                </a>
+                                            </Link>
+                                        </div> */}
+                  <div className="header-action-icon-2">
+                    <Link href="/shop-wishlist">
+                      <a>
+                        <img
+                          className="svgInject"
+                          alt="Evara"
+                          src="/assets/imgs/theme/icons/icon-heart.svg"
+                        />
+                        <span className="pro-count blue">{viewwishlist}</span>
+                      </a>
+                    </Link>
+                    <Link href="/shop-wishlist">
+                      <span className="lable">Wishlist</span>
+                    </Link>
+                  </div>
+                  <div className="header-action-icon-2">
+                    <Link href="/shop-cart">
+                      <a className="mini-cart-icon">
+                        <img
+                          alt="Evara"
+                          src="/assets/imgs/theme/icons/icon-cart.svg"
+                        />
+                        <span className="pro-count blue">{viewcart}</span>
+                      </a>
+                    </Link>
+                    <Link href="/shop-cart">
+                      <a>
+                        <span className="lable">Cart</span>
+                      </a>
+                    </Link>
+                  </div>
+
+                  <div className="header-action-icon-2">
+                    <Link href="#">
+                      <a>
+                        <img
+                          className="svgInject"
+                          alt="Nest"
+                          src="/assets/imgs/theme/icons/icon-user.svg"
+                        />
+                      </a>
+                    </Link>
+                    <Link href="#" onClick={(e) => handleClick(e)}>
+                      <a>
+                        <span className="lable ml-0">
+                          {token ? customer?.username : null}
+                        </span>
+                      </a>
+                    </Link>
+                    <div className="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                      <ul>
+                        {!token ? (
+                          <>
+                            <li>
+                              <Link href="/page-login">
+                                <a>
+                                  <i className="fi fi-rs-user mr-10"></i>
+                                  login
+                                </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/registration">
+                                <a>
+                                  <i className="fi fi-rs-user mr-10"></i>
+                                  Register
+                                </a>
+                              </Link>
+                            </li>
+                          </>
+                        ) : (
+                          <>
+                            <li>
+                              <Link href="/page-account">
+                                <a>
+                                  <i className="fi fi-rs-user mr-10"></i>
+                                  My Account
+                                </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/page-account">
+                                <a>
+                                  <i className="fi fi-rs-location-alt mr-10"></i>
+                                  Order Tracking
+                                </a>
+                              </Link>
+                            </li>
+                            {/* <li>
+                              <Link href="/page-account">
+                                <a>
+                                  <i className="fi fi-rs-label mr-10"></i>
+                                  My Voucher
+                                </a>
+                              </Link>
+                            </li> */}
+                            <li>
+                              <Link href="/shop-wishlist">
+                                <a>
+                                  <i className="fi fi-rs-heart mr-10"></i>
+                                  My Wishlist
+                                </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/page-account">
+                                <a>
+                                  <i className="fi fi-rs-settings-sliders mr-10"></i>
+                                  Setting
+                                </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <button className="lgbtn" onClick={handleLogout}>
+                                Sign Out
+                              </button>
+                            </li>
+                          </>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                  {/* <img
+                    src="/assets/imgs/theme/mapicon.png"
+                    alt="hotline"
+                    className="map-img"
+                  /> */}
+                  {/* <a href="/locationdropdown">
+                    <p style={{ fontSize: 14 }}>
+                      5171 W Campbell Ave Kent,
+                      <span>Delivery Address </span>
+                    </p>
+                  </a> */}
+                </div>
               </div>
 
               <div className="header-action-icon-2 d-block d-lg-none stt">
