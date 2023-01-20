@@ -1,7 +1,28 @@
 import Link from "next/link";
 import React from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 const BlogSidebar = () => {
+  const [category, setcategory] = useState([]);
+
+  const getAllCategory = () => {
+    axios
+      .get(`http://3.6.37.16:8000/admin/getallcategory`)
+      .then((res) => {
+        console.log(res.data.data);
+        setcategory(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getAllCategory();
+  }, []);
+
   return (
     <>
       <div className="widget-area">
@@ -18,56 +39,25 @@ const BlogSidebar = () => {
         <div className="sidebar-widget widget-category-2 mb-50">
           <h5 className="section-title style-1 mb-30">Category</h5>
           <ul>
-            <li>
-              <Link href="/products">
-                <a>
-                  {" "}
-                  <img src="/assets/imgs/theme/icons/category-1.svg" alt="" />
-                  Milks & Dairies
-                </a>
-              </Link>
-              <span className="count">30</span>
-            </li>
-            <li>
-              <Link href="/products">
-                <a>
-                  {" "}
-                  <img src="/assets/imgs/theme/icons/category-2.svg" alt="" />
-                  Clothing
-                </a>
-              </Link>
-              <span className="count">35</span>
-            </li>
-            <li>
-              <Link href="/products">
-                <a>
-                  {" "}
-                  <img src="/assets/imgs/theme/icons/category-3.svg" alt="" />
-                  Pet Foods{" "}
-                </a>
-              </Link>
-              <span className="count">42</span>
-            </li>
-            <li>
-              <Link href="/products">
-                <a>
-                  {" "}
-                  <img src="/assets/imgs/theme/icons/category-4.svg" alt="" />
-                  Baking material
-                </a>
-              </Link>
-              <span className="count">68</span>
-            </li>
-            <li>
-              <Link href="/products">
-                <a>
-                  {" "}
-                  <img src="/assets/imgs/theme/icons/category-5.svg" alt="" />
-                  Fresh Fruit
-                </a>
-              </Link>
-              <span className="count">87</span>
-            </li>
+            {category !== ""
+              ? category?.map((data) => (
+                  <li>
+                    <Link href="/products">
+                      <a>
+                        {" "}
+                        <img
+                          src={data?.image}
+                          className=" imagetext"
+                          style={{ width: "35px" }}
+                          alt=""
+                        />
+                        {data?.category_name}
+                      </a>
+                    </Link>
+                    <span className="count">30</span>
+                  </li>
+                ))
+              : null}
           </ul>
         </div>
 

@@ -1,65 +1,85 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-import { fetchByCatagory } from "../../redux/action/product";
+// import { fetchByCatagory } from "../../redux/action/product";
 
 const TrendingSlider = () => {
+  const [trending, setTrending] = useState([]);
 
-    const [trending, setTrending] = useState([]);
+  //   useEffect(() => {
+  //     fetchTrendingProducts();
+  //   }, []);
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
+  // const fetchProducts = async () => {
 
-    const fetchProducts = async () => {
+  //     const allProducts = await fetchByCatagory("/static/product.json");
 
-        // With Category
-        const allProducts = await fetchByCatagory("/static/product.json");
+  //     const trendingItem = allProducts.filter((item) => item.trending);
+  //     setTrending(trendingItem);
+  // };
 
-        const trendingItem = allProducts.filter((item) => item.trending);
-        setTrending(trendingItem);
-    };
+  const fetchTrendingProducts = async () => {
+    await axios
+      .get(`http://3.6.37.16:8000/admin/getall_trending_product`)
+      .then((res) => {
+        console.log(res.data.data);
+        setTrending(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
+  useEffect(() => {
+    fetchTrendingProducts();
+  }, []);
 
-    return (
-        <>
-            {trending.slice(0, 3).map((product, i) => (
-                    <article className="row align-items-center hover-up" key={i}>
-                    <figure className="col-md-4 mb-0">
-                        <Link href="/products/[slug]"
-                            as={`/products/${product.slug}`}><a><img src={product.images[0].img} alt="" /></a></Link>
-                    </figure>
-                    <div className="col-md-8 mb-0">
-                        <h6>
-                            <Link href="/products/[slug]"
-                                as={`/products/${product.slug}`}><a>{product.title}</a></Link>
-                        </h6>
-                        <div className="product-rate-cover">
-                            <div className="product-rate d-inline-block">
-                                <div className="product-rating" style={{ "width": "90%" }}></div>
-                            </div>
-                            <span className="font-small ml-5 text-muted"> (4.0)</span>
-                        </div>
-                        <div className="slt-box">
-                            <select className="form-control rt-1">
-                                 <option>1 kg</option>
-                                 <option>2 kg</option>
-                                 <option>3 kg</option>
-                                 <option>4 kg</option>
-                            </select>
-                        </div>
-                        <div className="product-price">
-                            <span>${product.price} </span>
-                            <span className="old-price">{product.oldPrice && `$ ${product.oldPrice}`}</span>
-                            <a className="add sty-1" >
-                            <i className="fi-rs-shopping-cart mr-5"></i>Add{" "}
-                            </a>
-                        </div>
-                    </div>
-                </article>
-                ))}
-        </>
-    );
+  return (
+    <>
+      {trending.slice(0, 3).map((data, i) => (
+        <article className="row align-items-center hover-up" key={i}>
+          <figure className="col-md-4 mb-0">
+            <Link href="">
+              <a>
+                <img src={data.productId?.product_image} alt="" />
+              </a>
+            </Link>
+          </figure>
+          <div className="col-md-8 mb-0">
+            <h6>
+              <Link href="">
+                <a>{data.productId?.product_name}</a>
+              </Link>
+            </h6>
+            <div className="product-rate-cover">
+              <div className="product-rate d-inline-block">
+                <div className="product-rating" style={{ width: "90%" }}></div>
+              </div>
+              <span className="font-small ml-5 text-muted"> (4.0)</span>
+            </div>
+            <div className="slt-box">
+              <select className="form-control rt-1">
+                <option>1 kg</option>
+                <option>2 kg</option>
+                <option>3 kg</option>
+                <option>4 kg</option>
+              </select>
+            </div>
+            <div className="product-price">
+              <span>&#8377;{data.productId?.buying_price} </span>
+              <span className="old-price">
+                &#8377;{data.productId?.mrp && ` ${data.productId?.mrp}`}
+              </span>
+              <a className="add sty-1">
+                <i className="fi-rs-shopping-cart mr-5"></i>Add{" "}
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </>
+  );
 };
 
 export default TrendingSlider;

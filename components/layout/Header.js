@@ -585,7 +585,7 @@ const Header = ({
                                                 </Link>
                                             </li> */}
                       <li>
-                        <Link href="/shop-list-left">
+                        <Link href="/shop-grid-right">
                           <a>
                             Shop
                             {/* <i className="fi-rs-angle-down"></i> */}
@@ -1327,6 +1327,9 @@ const Header = ({
                       </a>
                     </Link>
                   </div>
+
+                  {/* mobile cartlist */}
+
                   <div className="header-action-icon-2">
                     <Link href="/shop-cart">
                       <a className="mini-cart-icon">
@@ -1334,12 +1337,10 @@ const Header = ({
                           alt="Evara"
                           src="/assets/imgs/theme/icons/icon-cart.svg"
                         />
-                        <span className="pro-count white">
-                          {totalCartItems}
-                        </span>
+                        <span className="pro-count white">{viewcart}</span>
                       </a>
                     </Link>
-                    <div className="cart-dropdown-wrap cart-dropdown-hm2">
+                    {/* <div className="cart-dropdown-wrap cart-dropdown-hm2">
                       <ul>
                         <li>
                           <div className="shopping-cart-img">
@@ -1360,7 +1361,7 @@ const Header = ({
                             </h4>
                             <h3>
                               <span>1 × </span>
-                              $800.00
+                              $800.0065656565
                             </h3>
                           </div>
                           <div className="shopping-cart-delete">
@@ -1418,7 +1419,7 @@ const Header = ({
                           </Link>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="header-action-icon-2 d-block d-lg-none">
                     <div

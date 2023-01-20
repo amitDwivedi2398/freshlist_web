@@ -244,9 +244,9 @@ const ProductLists = ({
 
                           <div key={data?._id} className="product-card-bottom">
                             <div className="product-price">
-                              <span>${data.buying_price} </span>
+                              <span>&#8377;{data.buying_price} </span>
                               <span className="old-price">
-                                {data.mrp && `$ ${data.mrp}`}
+                                &#8377;{data.mrp && ` ${data.mrp}`}
                               </span>
                             </div>
                             <div className="add-cart">

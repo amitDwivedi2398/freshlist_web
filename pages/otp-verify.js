@@ -41,10 +41,14 @@ function OtpVerify() {
             <div className="row">
               <div className="col-xl-6 col-lg-8 col-md-12 m-auto">
                 <div className="row">
-                   <div className="col-lg-6 pr-30 d-none d-lg-block">
-                      <img className="border-radius-15" src="assets/imgs/page/otp-img.jpg" alt="" />
-                   </div>
-                   <div className="col-lg-6 col-md-6">
+                  <div className="col-lg-6 pr-30 d-none d-lg-block">
+                    <img
+                      className="border-radius-15"
+                      src="assets/imgs/page/otp-img.jpg"
+                      alt=""
+                    />
+                  </div>
+                  <div className="col-lg-6 col-md-6">
                     <div className="login_wrap widget-taber-content background-white">
                       <div className="padding_eight_all bg-white">
                         <div className="heading_s1">
@@ -112,7 +116,7 @@ function OtpVerify() {
                         </form>
                       </div>
                     </div>
-                   </div>
+                  </div>
                 </div>
               </div>
             </div>
