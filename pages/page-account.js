@@ -23,8 +23,8 @@ function Account() {
   const handleLogout = (e) => {
     alert("Are you sure to logout");
     console.log("logout hhhhh");
-    localStorage.clear();
-    window.location.replace("/");
+    // localStorage.clear();
+    window.location = "/";
   };
 
   const fetchuserorder = () => {

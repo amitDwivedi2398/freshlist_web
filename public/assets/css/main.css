@@ -12382,11 +12382,26 @@ footer .hotline img {
 
 /* rohit css */
 
+.subs-product {
+  width: 80%;
+  margin: 0 auto;
+  background: #f0f3ea1f;
+  padding: 30px;
+  box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
+}
+select.form-control.stl {
+  background: #fff;
+  height: 60px;
+}
+
 img.img-profile {
   width: 150px;
   height: 150px;
   border-radius: 100%;
   margin-bottom: 15px;
+}
+.subs-product h4 {
+    margin: 20px 0px;
 }
 
 /* location popup */

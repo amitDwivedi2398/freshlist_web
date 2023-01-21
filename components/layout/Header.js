@@ -25,7 +25,7 @@ const Header = ({
   const handleLogout = (e) => {
     alert("Are you sure to logout");
     console.log("logout hhhhh");
-    localStorage.clear();
+    localStorage.setItem("token", "");
     window.location.replace("/");
   };
 
@@ -1242,6 +1242,19 @@ const Header = ({
                                 <a>
                                   <i className="fi fi-rs-location-alt mr-10"></i>
                                   Order Tracking
+                                </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/page-subscriptions">
+                                <a>
+                                  <img
+                                    className="mr-10"
+                                    alt=""
+                                    src="/assets/imgs/theme/calen.png"
+                                    width={18}
+                                  />
+                                  Product Subscriptions
                                 </a>
                               </Link>
                             </li>
