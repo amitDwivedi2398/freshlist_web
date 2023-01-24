@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // import { fetchByCatagory } from "../../redux/action/product";
 
@@ -18,6 +19,32 @@ const TrendingSlider = () => {
   //     const trendingItem = allProducts.filter((item) => item.trending);
   //     setTrending(trendingItem);
   // };
+
+  // add to cart
+  const handleCart = (data) => {
+    const subtotl = data.buying_price * data.quantity;
+    console.log(data);
+    const userId = localStorage.getItem("userId");
+
+    axios
+      .post(`http://3.6.37.16:8000/admin/add_cart`, {
+        customer: userId,
+        product: data._id,
+      })
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.msg == "success") {
+          toast("Product Added Successfully");
+          // getviewcart();
+        } else {
+          toast("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const fetchTrendingProducts = async () => {
     await axios
@@ -71,7 +98,7 @@ const TrendingSlider = () => {
               <span className="old-price">
                 &#8377;{data.productId?.mrp && ` ${data.productId?.mrp}`}
               </span>
-              <a className="add sty-1">
+              <a className="add sty-1" onClick={() => handleCart(data)}>
                 <i className="fi-rs-shopping-cart mr-5"></i>Add{" "}
               </a>
             </div>

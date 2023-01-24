@@ -24,7 +24,9 @@ const Header = ({
 
   const handleLogout = (e) => {
     alert("Are you sure to logout");
-    console.log("logout hhhhh");
+    localStorage.removeItem("userId");
+    // console.log("logout hhhhh");
+    localStorage.clear();
     localStorage.setItem("token", "");
     window.location.replace("/");
   };
@@ -90,7 +92,7 @@ const Header = ({
   // viewone user
   const fetchCustomer = () => {
     const userId = localStorage.getItem("userId");
-    console.log(userId);
+    // console.log(userId);
     axios
       .get(`http://3.6.37.16:8000/user/getviewone/${userId}`)
       .then((response) => {

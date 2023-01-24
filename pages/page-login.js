@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState("");
 
   // const handleLogin = (e) => {
@@ -37,13 +37,15 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // localStorage.clear();
+    localStorage.clear();
+    // console.log(email, password);
     try {
-      const response = await axios.post("http://3.6.37.16:8000/user/login", {
+      const response = await axios.post(`http://3.6.37.16:8000/user/login`, {
+        // mobile: email,
         email: email,
         password: password,
       });
-      console.log("eerere", response.data);
+      // console.log("eerere", response.data);
       console.log(response.data);
       if (response.data.msg == "success") {
         localStorage.setItem("username", response.data.user.username);
@@ -88,7 +90,7 @@ function Login() {
                           <div className="form-group">
                             <input
                               value={email}
-                              type="text"
+                              type="input"
                               required=""
                               name=""
                               placeholder="Please Enter Your Mobile Number"

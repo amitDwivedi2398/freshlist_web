@@ -15,6 +15,42 @@ function Account() {
   const [currentpass, setcurrentPass] = useState("");
   const [newpass, setnewpass] = useState("");
   const [newcpass, setnewcpass] = useState("");
+  const [subscriptios, setSubscriptions] = useState([]);
+
+  const deactiveproduct = async (id) => {
+    console.log(id);
+    await axios
+      .delete(`http://3.6.37.16:8000/admin/delete_subscription/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.msg == "success") {
+          toast("Product Unsubscribed");
+          getallsubscriptions();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getallsubscriptions = () => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      /* need to change id with userid*/
+      axios
+        .get(
+          `http://3.6.37.16:8000/admin/total_subscription_list/63b66e5581fb9e18e11038da`
+        )
+        // .get(`http://3.6.37.16:8000/admin/total_subscription_list/${userId}`)
+        .then((res) => {
+          console.log(res.data.data);
+          setSubscriptions(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   const handleOnClick = (index) => {
     setActiveIndex(index); // remove the curly braces
@@ -22,8 +58,8 @@ function Account() {
 
   const handleLogout = (e) => {
     alert("Are you sure to logout");
-    console.log("logout hhhhh");
-    // localStorage.clear();
+    localStorage.removeItem("userId");
+    localStorage.clear();
     window.location = "/";
   };
 
@@ -33,7 +69,7 @@ function Account() {
     axios
       .get(`http://3.6.37.16:8000/admin/customer_order_list/${userId}`)
       .then((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setUserorder(response.data.data);
       })
       .catch((error) => {
@@ -121,6 +157,7 @@ function Account() {
     let data = localStorage.getItem("token");
     fetchCustomer();
     fetchuserorder();
+    getallsubscriptions();
   }, []);
 
   return (
@@ -256,10 +293,7 @@ function Account() {
                         </li>
                         <li className="nav-item">
                           <Link href="/page-login">
-                            <a
-                              className="nav-link"
-                              onClick={() => handleLogout()}
-                            >
+                            <a className="nav-link" onClick={handleLogout}>
                               <i className="fi-rs-sign-out mr-10"></i>Logout
                             </a>
                           </Link>
@@ -321,7 +355,7 @@ function Account() {
                                 <div className="col-lg-4 col-md-4 ">
                                   <div className="count-1 bg-2">
                                     <h4>30</h4>
-                                    <p>Total Refer and Eran</p>
+                                    <p>Total Refer and Earn</p>
                                   </div>
                                 </div>
                                 <div className="col-lg-4 col-md-4 ">
@@ -343,6 +377,10 @@ function Account() {
                         }
                       >
                         <div className="card">
+                          <div
+                            style={{ display: "flex", justifyContent: "right" }}
+                            className="d-flex returnproduct "
+                          ></div>
                           <div className="card-header">
                             <h3 className="mb-0">Your Orders</h3>
                           </div>
@@ -380,6 +418,21 @@ function Account() {
                                               >
                                                 Delete
                                               </a>
+                                              <div>
+                                                <button
+                                                  className={
+                                                    activeIndex === 12
+                                                      ? "nav-link active btn btn-success"
+                                                      : "nav-link"
+                                                  }
+                                                  onClick={() =>
+                                                    handleOnClick(12)
+                                                  }
+                                                  type="button"
+                                                >
+                                                  Return
+                                                </button>
+                                              </div>
                                             </td>
                                           </tr>
                                         );
@@ -885,7 +938,7 @@ function Account() {
                       >
                         <div className="card">
                           <div className="card-header">
-                            <h5>Your total number of reward points is: 0.</h5>
+                            <h5>Your Product: 0.</h5>
                           </div>
                           <div className="card-body">
                             <div className="table-responsive">
@@ -963,11 +1016,70 @@ function Account() {
                             <div className="table-responsive">
                               <table className="table">
                                 <thead>
-                                  <tr>
-                                    <th># S No.</th>
+                                  <tr style={{ fontSize: "15px" }}>
+                                    <th>S. No.</th>
                                     <th>Date added</th>
                                     <th>Subscribed Product</th>
                                     <th>Validity</th>
+                                    <th>Vender Name</th>
+                                    <th>Group Name</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                {subscriptios !== "" ? (
+                                  <>
+                                    {subscriptios?.map((value, i) => (
+                                      <tbody
+                                        style={{ justifyContent: "center" }}
+                                        key={value?._id}
+                                      >
+                                        <tr>
+                                          <td>{i + 1}</td>
+                                          <td>{value?.date_add}</td>
+                                          <td>
+                                            {
+                                              value?.subscribed_product
+                                                ?.product_name
+                                            }
+                                          </td>
+                                          <td>{value?.validity}</td>
+                                          <td>{value?.vender_id?.name}</td>
+                                          <td>{value?.group_id?.group_name}</td>
+                                          <td>{value?.quantity}</td>
+                                          <td>{value?.status}</td>
+                                          <td>
+                                            <a
+                                              onClick={() => {
+                                                deactiveproduct(value?._id);
+                                              }}
+                                              className="btn-small d-block"
+                                            >
+                                              Unsubscribe
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    ))}
+                                  </>
+                                ) : null}
+                              </table>
+                            </div>
+                          </div>
+
+                          {/* <div className="card-body">
+                            <div className="table-responsive">
+                              <table className="table">
+                                <thead>
+                                  <tr>
+                                    <th>S. No.</th>
+                                    <th>Date added</th>
+                                    <th>Subscribed Product</th>
+                                    <th>Validity</th>
+                                    <th>Vender Name</th>
+                                    <th>Group Name</th>
+                                    <th>Quantity</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                   </tr>
@@ -978,7 +1090,10 @@ function Account() {
                                     <td>March 45, 2020</td>
                                     <td>for bulk purchase</td>
                                     <td>2 month</td>
-                                    <td>Done</td>
+                                    <td>abc store</td>
+                                    <td>milk group</td>
+                                    <td>6</td>
+                                    <td>Active</td>
                                     <td>
                                       <a href="#" className="btn-small d-block">
                                         Delete
@@ -990,7 +1105,11 @@ function Account() {
                                     <td>March 45, 2020</td>
                                     <td>for bulk purchase</td>
                                     <td>2 month</td>
-                                    <td>Done</td>
+                                    <td>saha store</td>
+                                    <td>milk group</td>
+
+                                    <td>2 </td>
+                                    <td>Active</td>
                                     <td>
                                       <a href="#" className="btn-small d-block">
                                         Delete
@@ -1002,7 +1121,10 @@ function Account() {
                                     <td>March 45, 2020</td>
                                     <td>for bulk purchase</td>
                                     <td>2 month</td>
-                                    <td>Done</td>
+                                    <td>new store</td>
+                                    <td>daily routin</td>
+                                    <td>4</td>
+                                    <td>Active</td>
                                     <td>
                                       <a href="#" className="btn-small d-block">
                                         Delete
@@ -1012,7 +1134,7 @@ function Account() {
                                 </tbody>
                               </table>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       <div
@@ -1079,6 +1201,192 @@ function Account() {
                                 </tbody>
                               </table>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          activeIndex === 12
+                            ? "tab-pane fade active show"
+                            : "tab-pane fade "
+                        }
+                      >
+                        <div className="card">
+                          <div className="card-header">
+                            <h5>Return Your Product</h5>
+                          </div>
+                          <div className="card-body">
+                            <form method="post">
+                              <div className="row">
+                                <div className="form-group col-md-12">
+                                  <label>
+                                    product Name{" "}
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required
+                                    className="form-control"
+                                    // name="username"
+                                    type="text"
+                                    // onChange={(e) => {
+                                    //   setUsername(e.target.value);
+                                    // }}
+                                    // value={username}
+                                    placeholder="UserName"
+                                  />
+                                </div>
+                                {/* <div className="form-group col-md-6">
+                                  <label>
+                                    Last Name{" "}
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required=""
+                                    className="form-control"
+                                    name="phone"
+                                  />
+                                </div> */}
+                                {/* <div className="form-group col-md-12">
+                                  <label>
+                                    Display Name{" "}
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required=""
+                                    className="form-control"
+                                    name="dname"
+                                    type="text"
+                                  />
+                                </div> */}
+                                {/* <div className="form-group col-md-12">
+                                  <label>
+                                    User Image
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    className="form-control py-3"
+                                    type="file"
+                                    // value={image}
+                                    required=""
+                                    name="image"
+                                    onChange={(e) => {
+                                      setImage(e.target.files[0]);
+                                    }}
+                                    placeholder="Mobile Number"
+                                  />
+                                </div> */}
+                                <div className="form-group col-md-12">
+                                  <label>
+                                    Reason For Return
+                                    <span className="required">*</span>
+                                  </label>
+                                  <textarea
+                                    type="text"
+                                    // value={mobile}
+                                    required=""
+                                    name="mobile"
+                                    // onChange={(e) => {
+                                    //   setMobile(e.target.value);
+                                    // }}
+                                    placeholder=" Return Reason "
+                                  />
+                                </div>
+                                <div className="form-group col-md-12">
+                                  <label>
+                                    details
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    type="email"
+                                    // value={email}
+                                    required=""
+                                    name="email"
+                                    // onChange={(e) => {
+                                    //   setEmail(e.target.value);
+                                    // }}
+                                    placeholder=""
+                                  />
+                                </div>
+                                <div className="col-md-12">
+                                  <button
+                                    type="submit"
+                                    // onClick={handleProfileEdit}
+                                    className="btn btn-fill-out submit font-weight-bold mb-3"
+                                    name="submit"
+                                    value="Submit"
+                                  >
+                                    Save Change
+                                  </button>
+                                </div>
+                                <section className="card mt-3 ">
+                                  {/* <h3 className="d-flex justify-content-left mb-3">
+                                    Change Password
+                                  </h3> */}
+                                  {/* <div className="form-group col-md-12"> */}
+                                  {/* <label>
+                                      Current Password
+                                      <span className="required">*</span>
+                                    </label> */}
+                                  {/* <input
+                                      required
+                                      className="form-control"
+                                      name="password"
+                                      type="password"
+                                      value={currentpass}
+                                      onChange={(e) => {
+                                        setcurrentPass(e.target.value);
+                                      }}
+                                    /> */}
+                                  {/* </div> */}
+                                  {/* <div className="form-group col-md-12">
+                                    <label>
+                                      New Password
+                                      <span className="required">*</span>
+                                    </label>
+                                    <input
+                                      required
+                                      className="form-control"
+                                      name="npassword"
+                                      type="password"
+                                      value={newpass}
+                                      onChange={(e) => {
+                                        setnewpass(e.target.value);
+                                      }}
+                                    />
+                                  </div> */}
+                                  {/* <div className="form-group col-md-12">
+                                    <label>
+                                      Confirm Password{" "}
+                                      <span className="required">*</span>
+                                    </label>
+                                    <input
+                                      onChange={(e) => {
+                                        setnewcpass(e.target.value);
+                                      }}
+                                      value={newcpass}
+                                      required
+                                      className="form-control"
+                                      name="cpassword"
+                                      type="password"
+                                    />
+                                  </div> */}
+                                  {/* <div className="col-md-12">
+                                    <button
+                                      type="submit"
+                                      onClick={handlePassEdit}
+                                      className="btn btn-fill-out submit font-weight-bold"
+                                      name="submit"
+                                      value="Submit"
+                                    >
+                                      Update Password
+                                    </button>
+                                  </div> */}
+                                </section>
+                              </div>
+                            </form>
+                          </div>
+                          <div className="card-body">
+                            <div className="table-responsive"></div>
                           </div>
                         </div>
                       </div>
