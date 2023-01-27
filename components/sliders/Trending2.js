@@ -22,35 +22,38 @@ const TrendingSlider = () => {
 
   // add to cart
   const handleCart = (data) => {
-    const subtotl = data.buying_price * data.quantity;
+    const subtotl = data?.productId?.buying_price * data?.productId?.quantity;
     console.log(data);
     const userId = localStorage.getItem("userId");
-
-    axios
-      .post(`http://3.6.37.16:8000/admin/add_cart`, {
-        customer: userId,
-        product: data._id,
-      })
-      .then((res) => {
-        console.log(res.data);
-
-        if (res.data.msg == "success") {
-          toast("Product Added Successfully");
-          // getviewcart();
-        } else {
-          toast("Something went wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (userId !== "" && userId !== null) {
+      axios
+        .post(`http://3.6.37.16:8000/admin/add_cart`, {
+          customer: userId,
+          product: data?.productId?._id,
+          unit_price: data?.productId?.buying_price,
+          quantity: data?.productId?.quantity,
+          subtotal: subtotl,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.msg == "success") {
+            toast("Product Added Successfully");
+            // getviewcart();
+          } else {
+            toast("Something went wrong");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else toast("login First");
   };
 
   const fetchTrendingProducts = async () => {
     await axios
       .get(`http://3.6.37.16:8000/admin/getall_trending_product`)
       .then((res) => {
-        console.log(res.data.data);
+        console.log(res.data);
         setTrending(res.data.data);
       })
       .catch((err) => {
@@ -65,7 +68,7 @@ const TrendingSlider = () => {
   return (
     <>
       {trending.slice(0, 3).map((data, i) => (
-        <article className="row align-items-center hover-up" key={i}>
+        <article className="row align-items-center hover-up" key={data?._id}>
           <figure className="col-md-4 mb-0">
             <Link href="">
               <a>
@@ -99,7 +102,7 @@ const TrendingSlider = () => {
                 &#8377;{data.productId?.mrp && ` ${data.productId?.mrp}`}
               </span>
               <a className="add sty-1" onClick={() => handleCart(data)}>
-                <i className="fi-rs-shopping-cart mr-5"></i>Add{" "}
+                <i className="fi-rs-shopping-cart mr-5"></i>Add
               </a>
             </div>
           </div>

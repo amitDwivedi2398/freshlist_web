@@ -38,7 +38,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     localStorage.clear();
-    // console.log(email, password);
+    console.log(email, password);
     try {
       const response = await axios.post(`http://3.6.37.16:8000/user/login`, {
         // mobile: email,
@@ -55,7 +55,9 @@ function Login() {
         Router.push("/");
       }
     } catch (error) {
-      console.error(error);
+      if (error.response.data.msg == "User Doesnot Exist") {
+        toast("User does not Exist");
+      }
     }
   };
 

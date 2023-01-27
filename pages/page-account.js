@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { loadGetInitialProps } from "next/dist/shared/lib/utils";
 
 function Account() {
   const [activeIndex, setActiveIndex] = useState(1);
@@ -16,6 +17,8 @@ function Account() {
   const [newpass, setnewpass] = useState("");
   const [newcpass, setnewcpass] = useState("");
   const [subscriptios, setSubscriptions] = useState([]);
+  const [reasonfor, setReasonfor] = useState("");
+  const [comment, setComment] = useState("");
 
   const deactiveproduct = async (id) => {
     console.log(id);
@@ -38,10 +41,10 @@ function Account() {
     if (userId) {
       /* need to change id with userid*/
       axios
-        .get(
-          `http://3.6.37.16:8000/admin/total_subscription_list/63b66e5581fb9e18e11038da`
-        )
-        // .get(`http://3.6.37.16:8000/admin/total_subscription_list/${userId}`)
+        // .get(
+        //   `http://3.6.37.16:8000/admin/total_subscription_list/63b66e5581fb9e18e11038da`
+        // )
+        .get(`http://3.6.37.16:8000/admin/total_subscription_list/${userId}`)
         .then((res) => {
           console.log(res.data.data);
           setSubscriptions(res.data.data);
@@ -52,8 +55,29 @@ function Account() {
     }
   };
 
-  const handleOnClick = (index) => {
+  const gethandlereturn = () => {
+    console.log(returnid);
+    axios
+      .get(`http://3.6.37.16:8000/user/viewone_reject_product/${returnid}`)
+      .then((res) => {
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handledatadelete = (id) => {
+    console.log(id);
+  };
+
+  const [returnid, setReturnid] = useState("");
+  const handleOnClick = (index, id) => {
     setActiveIndex(index); // remove the curly braces
+    if (index === 12) {
+      setReturnid(id);
+      gethandlereturn();
+    }
   };
 
   const handleLogout = (e) => {
@@ -65,11 +89,11 @@ function Account() {
 
   const fetchuserorder = () => {
     const userId = localStorage.getItem("userId");
-    // console.log(userId);
+    console.log(userId);
     axios
       .get(`http://3.6.37.16:8000/admin/customer_order_list/${userId}`)
       .then((response) => {
-        // console.log(response.data.data);
+        console.log(response.data.data);
         setUserorder(response.data.data);
       })
       .catch((error) => {
@@ -402,38 +426,42 @@ function Account() {
                                   {userorder.length
                                     ? userorder.map((data, index) => {
                                         return (
-                                          <tr>
-                                            <td>1</td>
-                                            <td>{data.orderId}</td>
+                                          <tr key={data?._id}>
+                                            <td>{index + 1}</td>
+                                            <td>{data?.orderId}</td>
                                             <td>
-                                              {data.product?.product_name}
+                                              {data?.product?.product_name}
                                             </td>
 
                                             <td>&#8377;{data.product?.mrp}</td>
                                             <td>{data.status}</td>
                                             <td>
                                               <a
+                                                onClick={() => {
+                                                  handledatadelete(data?._id);
+                                                }}
                                                 href="#"
                                                 className="btn-small d-block"
                                               >
                                                 Delete
                                               </a>
-                                              <div>
-                                                <button
-                                                  className={
-                                                    activeIndex === 12
-                                                      ? "nav-link active btn btn-success"
-                                                      : "nav-link"
-                                                  }
-                                                  onClick={() =>
-                                                    handleOnClick(12)
-                                                  }
-                                                  type="button"
-                                                >
-                                                  Return
-                                                </button>
-                                              </div>
                                             </td>
+                                            <div>
+                                              <a
+                                                className={
+                                                  activeIndex === 12
+                                                    ? "nav-link active btn btn-success"
+                                                    : "nav-link"
+                                                }
+                                                onClick={() =>
+                                                  handleOnClick(12, data?._id)
+                                                }
+                                                type="button"
+                                              >
+                                                Return
+                                              </a>
+                                            </div>
+                                            <td></td>
                                           </tr>
                                         );
                                       })
@@ -548,6 +576,9 @@ function Account() {
                           </div>
                         </div>
                       </div>
+                      {/* <div className="row">
+                         <h2>Add Address here</h2>
+                      </div> */}
                       <div
                         className={
                           activeIndex === 5
@@ -965,7 +996,7 @@ function Account() {
                                     {/* <td>Done</td> */}
                                     <td>
                                       <a href="#" className="btn-small d-block">
-                                        Return
+                                        Returned
                                       </a>
                                     </td>
                                   </tr>
@@ -978,7 +1009,7 @@ function Account() {
                                     {/* <td>Done</td> */}
                                     <td>
                                       <a href="#" className="btn-small d-block">
-                                        Return
+                                        Returned
                                       </a>
                                     </td>
                                   </tr>
@@ -991,7 +1022,7 @@ function Account() {
                                     {/* <td>Done</td> */}
                                     <td>
                                       <a href="#" className="btn-small d-block">
-                                        Return
+                                        Returned
                                       </a>
                                     </td>
                                   </tr>
@@ -1218,21 +1249,55 @@ function Account() {
                           <div className="card-body">
                             <form method="post">
                               <div className="row">
-                                <div className="form-group col-md-12">
+                                <div className="form-group col-md-4 col-sm-6 col-lg-4">
                                   <label>
-                                    product Name{" "}
+                                    Product Name
                                     <span className="required">*</span>
                                   </label>
                                   <input
-                                    required
+                                    readOnly
                                     className="form-control"
+                                    placeholder="Onion"
                                     // name="username"
                                     type="text"
                                     // onChange={(e) => {
                                     //   setUsername(e.target.value);
                                     // }}
                                     // value={username}
-                                    placeholder="UserName"
+                                  />
+                                </div>
+                                <div className="form-group col-md-4 col-sm-6 col-lg-4">
+                                  <label>
+                                    Product Price
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    readOnly
+                                    className="form-control"
+                                    placeholder="20"
+                                    // name="username"
+                                    type="text"
+                                    // onChange={(e) => {
+                                    //   setUsername(e.target.value);
+                                    // }}
+                                    // value={username}
+                                  />
+                                </div>
+                                <div className="form-group col-md-4 col-sm-6 col-lg-4">
+                                  <label>
+                                    Product Quantity
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    readOnly
+                                    className="form-control"
+                                    placeholder="15"
+                                    // name="username"
+                                    type="text"
+                                    // onChange={(e) => {
+                                    //   setUsername(e.target.value);
+                                    // }}
+                                    // value={username}
                                   />
                                 </div>
                                 {/* <div className="form-group col-md-6">
@@ -1275,23 +1340,68 @@ function Account() {
                                     placeholder="Mobile Number"
                                   />
                                 </div> */}
-                                <div className="form-group col-md-12">
+                                <div className="form-group col-md-12 col-sm-12 col-lg-12">
                                   <label>
                                     Reason For Return
                                     <span className="required">*</span>
                                   </label>
+                                  {/* <Input
+                                    required
+                                    type="select"
+                                    name="catgry"
+                                    className="form-control"
+                                    onChange={(e) => setCatgry(e.target.value)}
+                                  >
+                                    <option>Select Category</option>
+                                    {allcatego?.map((allCategory) => {
+                                      return (
+                                        <option
+                                          value={allCategory?._id}
+                                          key={allCategory?._id}
+                                        >
+                                          {allCategory?.title}
+                                        </option>
+                                      );
+                                    })}
+                                  </Input> */}
+                                  <select
+                                    required
+                                    value={reasonfor}
+                                    onChange={(e) =>
+                                      setReasonfor(e.target.value)
+                                    }
+                                    className="form-group form-control"
+                                  >
+                                    <option value="Product Damage">
+                                      Product Damage
+                                    </option>
+                                    <option>Wrong Product delivered</option>
+                                    <option>
+                                      The customer no longer needed the product
+                                    </option>
+                                    <option>
+                                      product did not meet the customer’s
+                                      expectations
+                                    </option>
+                                    <option>Wrong Product Shipped</option>
+                                  </select>
+                                </div>
+                                <div className="form-group col-md-12">
+                                  <label>
+                                    Comment
+                                    <span className="required"></span>
+                                  </label>
                                   <textarea
                                     type="text"
-                                    // value={mobile}
-                                    required=""
-                                    name="mobile"
-                                    // onChange={(e) => {
-                                    //   setMobile(e.target.value);
-                                    // }}
+                                    value={comment}
+                                    name="comment"
+                                    onChange={(e) => {
+                                      setComment(e.target.value);
+                                    }}
                                     placeholder=" Return Reason "
                                   />
                                 </div>
-                                <div className="form-group col-md-12">
+                                {/* <div className="form-group col-md-12">
                                   <label>
                                     details
                                     <span className="required">*</span>
@@ -1306,7 +1416,7 @@ function Account() {
                                     // }}
                                     placeholder=""
                                   />
-                                </div>
+                                </div> */}
                                 <div className="col-md-12">
                                   <button
                                     type="submit"
@@ -1315,7 +1425,7 @@ function Account() {
                                     name="submit"
                                     value="Submit"
                                   >
-                                    Save Change
+                                    Return
                                   </button>
                                 </div>
                                 <section className="card mt-3 ">

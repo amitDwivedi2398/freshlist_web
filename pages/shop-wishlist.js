@@ -12,25 +12,29 @@ const Wishlist = ({}) => {
     const subtotl = data.buying_price * data.quantity;
     console.log(data);
     const userId = localStorage.getItem("userId");
+    if (userId !== "") {
+      axios
+        .post(`http://3.6.37.16:8000/admin/add_cart`, {
+          customer: userId,
+          product: data?.product?._id,
+          unit_price: data?.product?.buying_price,
+          quantity: data?.product?.quantity,
+          subtotal: subtotl,
+        })
+        .then((res) => {
+          console.log(res.data);
 
-    axios
-      .post(`http://3.6.37.16:8000/admin/add_cart`, {
-        customer: userId,
-        product: data._id,
-      })
-      .then((res) => {
-        console.log(res.data);
-
-        if (res.data.msg == "success") {
-          toast("Product Added Successfully");
-          // getviewcart();
-        } else {
-          toast("Something went wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          if (res.data.msg == "success") {
+            toast("Product Added Successfully");
+            // getviewcart();
+          } else {
+            toast("Something went wrong");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else toast("login First");
   };
 
   const [wishlist, setWishlist] = useState([]);
@@ -38,15 +42,14 @@ const Wishlist = ({}) => {
   const deleteFromWish = (id) => {
     console.log(id);
     const userId = localStorage.getItem("userId");
-
     axios
       .delete(`http://3.6.37.16:8000/admin/remove_wishlist/${id}`)
       .then((res) => {
-        console.log(res.data.msg);
+        console.log(res.data);
 
-        if (res.data.msg == "success") {
-          toast("Product Delete Successfully");
+        if (res.data.msg == "Delete success") {
           getAllwishlist();
+          toast("Product Delete Successfully");
         } else {
           toast("Something went wrong");
         }
@@ -60,7 +63,6 @@ const Wishlist = ({}) => {
     const userId = localStorage.getItem("userId");
     axios
       .get(`http://3.6.37.16:8000/admin/all_wishlist/${userId}`)
-      //   .get(`http://3.6.37.16:8000/admin/getbycart/63a1587b5d5470a96dba6891`)
       .then((res) => {
         console.log(res.data.data);
         setWishlist(res.data.data);
@@ -175,7 +177,7 @@ const Wishlist = ({}) => {
                           <td className="action" data-title="Remove">
                             <a
                               className="justify-content-center"
-                              onClick={(e) => deleteFromWish(data._id)}
+                              onClick={(e) => deleteFromWish(data?._id)}
                             >
                               <i
                                 size="50px"

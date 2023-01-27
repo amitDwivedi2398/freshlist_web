@@ -4,6 +4,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Header from "../components/layout/Header";
 
 import Link from "next/link";
 import {
@@ -46,6 +47,7 @@ const Cart = ({
         if (res.data.msg == "success") {
           toast("Product Delete Successfully");
           getAllCart();
+          Header();
         } else {
           toast("Something went wrong");
         }

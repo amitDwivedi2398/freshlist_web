@@ -25,28 +25,29 @@ const ProductLists = ({
     const subtotl = data.buying_price * data.quantity;
     console.log(data);
     const userId = localStorage.getItem("userId");
+    if (userId) {
+      axios
+        .post(`http://3.6.37.16:8000/admin/add_cart`, {
+          customer: userId,
+          product: data._id,
+          unit_price: data?.buying_price,
+          quantity: data?.quantity,
+          subtotal: subtotl,
+        })
+        .then((res) => {
+          console.log(res.data);
 
-    axios
-      .post(`http://3.6.37.16:8000/admin/add_cart`, {
-        customer: userId,
-        product: data._id,
-        unit_price: data.buying_price,
-        quantity: data.quantity,
-        subtotal: subtotl,
-      })
-      .then((res) => {
-        console.log(res.data);
-
-        if (res.data.msg == "success") {
-          toast("Product Added Successfully");
-          // getviewcart();
-        } else {
-          toast("Something went wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          if (res.data.msg == "success") {
+            toast("Product Added Successfully");
+            // getviewcart();
+          } else {
+            toast("Something went wrong");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else toast("Login First");
   };
 
   // const handleCompare = (product) => {
@@ -123,7 +124,7 @@ const ProductLists = ({
             {product.length
               ? product.map((data, index) => {
                   return (
-                    <SwiperSlide>
+                    <SwiperSlide key={data?._id}>
                       <div key={data?._id} className="product-cart-wrap mb-30">
                         <div
                           key={data?._id}

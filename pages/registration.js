@@ -5,33 +5,103 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import Layout from "../components/layout/Layout";
 import Router from "next/router";
-
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../components/firebase/firebase_config";
 function UserRegister() {
-  const [input, setInput] = useState("");
+  // const [input, setInput] = useState("");
+  const [otp, setOtp] = useState("");
+  const [ph, setPh] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showOTP, setShowOTP] = useState(false);
+  const [user, setUser] = useState(null);
+  const handleregister = async (e) => {
+   await axios.post(`http://3.6.37.16:8000/user/sendotp`, { mobile: ph })
+      .then((res) => {
+        console.log(res.data);
+        // console.log(res.data._id);
+        localStorage.setItem("LoginId", res.data._id);
 
-  const handleregister = (e) => {
-    e.preventDefault();
-    localStorage.setItem("mobile", input);
-    if (input.length == 10) {
-      axios
-        .post(`http://3.6.37.16:8000/user/sendotp`, { mobile: input })
-        .then((res) => {
-          console.log(res.data);
-          // console.log(res.data._id);
-          localStorage.setItem("LoginId", res.data._id);
-
-          if (res.data.msg == "otp send successfully") {
-            toast("OTP send successfully !");
-            Router.push("/otp-verify");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      toast(" Please Enter Mobile Number correctly ?");
-    }
+        if (res.data.msg == "otp send successfully") {
+          toast("OTP send successfully !");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+  const handleotpsubmit = (e) => {
+    console.log(otp);
+    console.log(ph);
+    axios
+      .post(`http://3.6.37.16:8000/user/verifyotps`, {
+        mobile: ph,
+        otp: 123456,
+      })
+      .then((res) => {
+        console.log(res);
+        if ((res.data.msg = "otp verified please register")) {
+          toast("OTP Verified successfully !");
+          Router.push("/completeregister");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+
+  function onCaptchVerify() {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            onSignup();
+          },
+          "expired-callback": () => { },
+        },
+        auth
+      );
+    }
+  }
+
+  function onSignup() {
+    setLoading(true);
+    onCaptchVerify();
+
+
+    const appVerifier = window.recaptchaVerifier;
+
+    const formatPh = "+91" + ph;
+
+    signInWithPhoneNumber(auth, formatPh, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        setShowOTP(true);
+        handleregister();
+        toast.success("OTP sended successfully!");
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }
+
+  function onOTPVerify() {
+    window.confirmationResult
+      .confirm(otp)
+      .then(async (res) => {
+        console.log(res);
+        handleotpsubmit();
+        setUser(res.user);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }
   return (
     <>
       <Layout parent="Home" sub="Register">
@@ -60,22 +130,57 @@ function UserRegister() {
                           </p>
                         </div>
                         <br></br>
-                        <form method="post">
-                          <div className="form-group">
-                            <input
-                              value={input}
-                              type="text"
-                              required=""
-                              name=""
-                              placeholder="Please Enter Your Mobile Number"
-                              onChange={(e) => {
-                                setInput(e.target.value);
-                              }}
-                            />
-                          </div>
+                        <div id="recaptcha-container"></div>
+                        <form>
+                          {showOTP ? (
+                            <div className="form-group">
+                              <input
+                                value={otp}
+                                onChange={(e) => {
+                                  setOtp(e.target.value);
+                                }}
+                                type="text"
+                                required=""
+                                name=""
+                                placeholder="Please Enter Your OTP Number"
+                              />
+                              <div className="form-group mb-30">
+                                {/* <button type="submit" className="btn btn-fill-out btn-block hover-up font-weight-bold" name="login">Submit</button> */}
+                                <a
+                                  onClick={onOTPVerify}
+                                  className="btn btn-fill-out btn-block hover-up font-weight-bold"
+                                >
+                                  Submit
+                                </a>
+                              </div>
+                            </div>) : (
+                            <div className="form-group">
+                              <input
+                                value={ph}
+                                onChange={(e) => {
+                                  setPh(e.target.value);
+                                }}
+                                type="text"
+                                required=""
+                                name=""
+                                placeholder="Please Enter Your Mobile Number"
+                              />
+                              <div className="form-group mb-30">
+                                {/* <button type="submit" className="btn btn-fill-out btn-block hover-up font-weight-bold" name="login">Submit</button> */}
+                                <a
+                                  onClick={onSignup}
+                                  className="btn btn-fill-out btn-block hover-up font-weight-bold"
+                                >
+                                  Submit
+                                </a>
+                              </div>
+                            </div>
+                          )}
+
 
                           <div className="login_footer form-group mb-10">
                             <div className="chek-form">
+
                               <div className="custome-checkbox">
                                 {/* <input
                                   className="form-check-input"
@@ -99,16 +204,16 @@ function UserRegister() {
                               </a>
                             </Link> */}
                           </div>
-                          <div className="form-group mb-30">
-                            {/* <button type="submit" className="btn btn-fill-out btn-block hover-up font-weight-bold" name="login">Submit</button> */}
-                            <a
+                          {/* <div className="form-group mb-30"> */}
+                          {/* <button type="submit" className="btn btn-fill-out btn-block hover-up font-weight-bold" name="login">Submit</button> */}
+                          {/* <a
                               onClick={handleregister}
                               href="otp-verify"
                               className="btn btn-fill-out btn-block hover-up font-weight-bold"
                             >
                               Submit
                             </a>
-                          </div>
+                          </div> */}
                           <p className="font-xs text-muted">
                             <strong>Note:</strong>Your personal data will be
                             used to support your experience throughout this

@@ -10,10 +10,10 @@ function OtpVerify() {
   const [Otp, setOtp] = useState("");
   const handleotpsubmit = (e) => {
     e.preventDefault();
-    console.log(Otp);
+
     if (Otp !== "") {
       const mobile = localStorage.getItem("mobile");
-      console.log(mobile);
+
       axios
         .post(`http://3.6.37.16:8000/user/verifyotps`, {
           mobile: mobile,
@@ -21,7 +21,7 @@ function OtpVerify() {
         })
         .then((res) => {
           console.log(res);
-          if ((res.data.msg = "otp verified please register")) {
+          if ((res.data.msg = "Otp verified please register")) {
             toast("OTP Verified successfully !");
             Router.push("/completeregister");
           }

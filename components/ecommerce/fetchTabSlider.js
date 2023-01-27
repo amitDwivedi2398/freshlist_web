@@ -43,7 +43,7 @@ function FeatchTabSlider() {
     await axios
       .get(`http://3.6.37.16:8000/admin/getbannerbytype/uybkjb`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setFirsts(res.data.data);
       })
       .catch((err) => {

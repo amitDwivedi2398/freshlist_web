@@ -22,28 +22,33 @@ const TrendingSlider = () => {
 
   // add to cart
   const handleCart = (data) => {
-    const subtotl = data.buying_price * data.quantity;
+    // {need to change quantity}
+    // const subtotl = data?.productId?.buying_price * 2;
+    const subtotl = data?.productId?.buying_price * data?.productId?.quantity;
     console.log(data);
     const userId = localStorage.getItem("userId");
-
-    axios
-      .post(`http://3.6.37.16:8000/admin/add_cart`, {
-        customer: userId,
-        product: data._id,
-      })
-      .then((res) => {
-        console.log(res.data);
-
-        if (res.data.msg == "success") {
-          toast("Product Added Successfully");
-          // getviewcart();
-        } else {
-          toast("Something went wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (userId !== "" && userId !== null) {
+      axios
+        .post(`http://3.6.37.16:8000/admin/add_cart`, {
+          customer: userId,
+          product: data?._id,
+          unit_price: data?.buying_price,
+          quantity: data?.productId?.quantity,
+          subtotal: subtotl,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.msg == "success") {
+            toast("Product Added Successfully");
+            // getviewcart();
+          } else {
+            toast("Something went wrong");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else toast("login First");
   };
 
   const fetchRecentlyProducts = async () => {
@@ -98,7 +103,7 @@ const TrendingSlider = () => {
                 {data.selling_price && ` ${data.selling_price}`}
               </span>
               <a className="add sty-1" onClick={() => handleCart(data)}>
-                <i className="fi-rs-shopping-cart mr-5"></i>Add{" "}
+                <i className="fi-rs-shopping-cart mr-5"></i>Add
               </a>
             </div>
           </div>

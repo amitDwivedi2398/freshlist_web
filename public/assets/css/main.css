@@ -3562,9 +3562,9 @@ table .product-thumbnail img {
 .banner-img.style-2 {
   border-radius: 15px;
   overflow: hidden;
-  height: 520px;
-  background: url(../imgs/banner/banner-4.png) no-repeat center bottom;
-  background-size: cover;
+  height: 480px;
+  background: no-repeat center bottom;
+  background-size: cover !important;
   width: 100%;
 }
 
@@ -9502,8 +9502,9 @@ footer .hotline img {
 }
 
 .newsletter .newsletter-inner {
-  background: url(../imgs/banner/banner-10.png) no-repeat center;
-  background-size: cover;
+  background: no-repeat center;
+  /* background: no-repeat center !important; */
+  background-size: cover !important;
   padding: 84px 78px;
   clear: both;
   display: table;
@@ -12401,7 +12402,7 @@ img.img-profile {
   margin-bottom: 15px;
 }
 .subs-product h4 {
-    margin: 20px 0px;
+  margin: 20px 0px;
 }
 
 /* location popup */
