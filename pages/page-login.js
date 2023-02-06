@@ -40,9 +40,9 @@ function Login() {
     localStorage.clear();
     console.log(email, password);
     try {
-      const response = await axios.post(`http://3.6.37.16:8000/user/login`, {
-        // mobile: email,
-        email: email,
+      const response = await axios.post(`http://3.111.58.192:4000/user/login`, {
+        mobile: email,
+        // email: email,
         password: password,
       });
       // console.log("eerere", response.data);
@@ -50,7 +50,7 @@ function Login() {
       if (response.data.msg == "success") {
         localStorage.setItem("username", response.data.user.username);
         localStorage.setItem("userId", response.data.user._id);
-        localStorage.setItem("token", response.data.token);
+        // localStorage.setItem("token", response.data.token);
 
         Router.push("/");
       }
