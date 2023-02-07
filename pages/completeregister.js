@@ -18,17 +18,16 @@ function CompleteRegister() {
     console.log(user, email, password, cpassword, LoginId);
 
     axios
-      .post(`http://3.6.37.16:8000/user/userRegister/${LoginId}`, {
+      .post(`http://3.111.58.192:4000/user/add_details/${LoginId}`, {
         username: user,
         email: email,
         password: password,
         cnfrmPassword: cpassword,
-        captcha: scode,
       })
       .then((res) => {
-        console.log(res.data.data._id);
+        console.log("amit<<<<<<<<<++++",res.data);
         localStorage.setItem("userId", res.data.data._id);
-        if (res.data.msg == "success") {
+        if (res.data.message == "success") {
           toast("Account Created Successfully");
           Router.push("/page-login");
         } else {
@@ -109,7 +108,7 @@ function CompleteRegister() {
                               placeholder="Confirm password"
                             />
                           </div>
-                          <div className="login_footer form-group">
+                          {/* <div className="login_footer form-group">
                             <div className="chek-form">
                               <input
                                 value={scode}
@@ -128,7 +127,7 @@ function CompleteRegister() {
                               <b className="text-sale">7</b>
                               <b className="text-best">5</b>
                             </span>
-                          </div>
+                          </div> */}
                           {/* <div className="payment_option mb-50">
                                                     <div className="custome-radio">
                                                         <input className="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" defaultChecked="" />

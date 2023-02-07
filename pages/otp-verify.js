@@ -15,7 +15,7 @@ function OtpVerify() {
       const mobile = localStorage.getItem("mobile");
 
       axios
-        .post(`http://3.6.37.16:8000/user/verifyotps`, {
+        .post(`http://3.111.58.192:4000/user/verifyotps`, {
           mobile: mobile,
           otp: Otp,
         })
